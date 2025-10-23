@@ -20,7 +20,7 @@ const AnswerInput = ({
 
     // --- DROPDOWN STATE LOGIC ---
     const [isOpen, setIsOpen] = useState(false);
-    const options = Array.isArray(field?.options) ? field.options : [];
+    // const options = Array.isArray(field?.options) ? field.options : [];
     const isMultiSelect = field.selectionType === 'Multi Select';
     
     // Ensure answerValue is an array if Multi Select, otherwise treat it as a string.
@@ -66,7 +66,7 @@ const AnswerInput = ({
     };
 
     // 🔑 CORE LOGIC FIX: Corrected disabling logic (Only disabled when NOT active AND NOT in Preview mode).
-    const isDisabled = !isFieldActive && !isPreview; 
+    const isDisabled = !isPreview; 
 
     // 🔑 CLASS LOGIC
     const inputClassName = isPreview ? 'preview-input-field' : (!isFieldActive ? 'display-view' : '');
