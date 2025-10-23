@@ -1,0 +1,97 @@
+
+
+
+// src/Styles/CreateForm.sass (Corrected Indentation)
+
+$primary-color: #5D38DF // Deep Purple
+$secondary-color: #f7f3ff // Very Light Purple background
+$border-color: #e0e0e0 // Light gray for general borders
+$text-color: #1e1e1e // Dark text
+$light-text: #6e6e6e // Gray for placeholders/descriptions
+$char-count-color: #999999 // Light gray for counts
+$required-color: #e03b3b // Red for required indicators
+$footer-height: 60px;
+$card-border-light: #9281cf; // Light purple border for inputs
+
+.form-builder-page
+    padding: 0 2rem 2rem 2rem
+    padding-bottom: $footer-height + 30px 
+    min-height: calc(100vh - 100px) 
+
+.form-tabs
+    display: flex
+    border-bottom: 1px solid $border-color
+    margin-bottom: 30px
+    background-color: white
+    border-radius: 5px
+    position: sticky
+    top: 0
+    z-index: 50
+
+    .tab
+        padding: 1rem 1.5rem
+        font-size: 1rem
+        cursor: pointer
+        transition: border-bottom 0.3s ease
+
+        &.active
+            color: $primary-color
+            border-bottom: 2px solid $primary-color
+            font-weight: 600
+
+        &.inactive
+            color: $light-text
+            border-bottom: 2px solid transparent 
+
+
+
+.form-action-footer
+    position: fixed 
+    bottom: 0
+    left: 0
+    width: 100% 
+    display: flex
+    justify-content: flex-end
+    align-items: center 
+    padding: 15px 3rem 
+    height: $footer-height
+    background-color: white
+    border-top: 1px solid $border-color
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05)
+    z-index: 100 
+
+    button
+        padding: 10px 20px
+        border-radius: 6px
+        font-size: 1rem
+        font-weight: 500
+        cursor: pointer
+        transition: all 0.2s ease
+
+    .preview-btn
+        color: $primary-color
+        background: transparent
+        border: none
+        margin-right: auto
+        font-weight: 600
+        padding-left: 0 
+        &:hover 
+            text-decoration: underline; 
+
+    .save-draft-btn
+        background-color: white
+        color: $primary-color
+        border: 1px solid $primary-color
+        margin-right: 1rem
+
+    .next-btn, .publish-btn
+        background-color: $primary-color
+        color: white
+        border: 1px solid $primary-color
+
+    button:disabled
+        opacity: 0.4
+        cursor: not-allowed
+        border: 1px solid #ccc 
+        background-color: #f5f5f5 
+        color: #aaaaaa

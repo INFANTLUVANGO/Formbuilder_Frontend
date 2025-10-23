@@ -1,0 +1,343 @@
+$primary-color: #5D38DF // Deep Purple
+$secondary-color: #f7f3ff // Very Light Purple background
+$border-color: #e0e0e0 // Light gray for general borders
+$text-color: #1e1e1e // Dark text
+$light-text: #585561 // Gray for placeholders/descriptions
+$char-count-color: #999999 // Light gray for counts
+$required-color: #e03b3b // Red for required indicators
+$card-border-light: #9281cf; // Light purple border for inputs
+
+// =========================================================
+// GLOBAL/BASE INPUT STYLES (Used when ACTIVE in Editor Mode)
+// =========================================================
+.field-answer
+    // Base style for *all* standard input types when they are NOT the special options/toggles
+    input:not([type="checkbox"], [type="radio"], .option-text-input, .date-input, .preview-input-field), 
+    textarea, 
+    select:not(.preview-input-field)
+        width: 100%
+        padding: 10px 12px
+        border-radius: 8px
+        margin-top: 10px
+        font-size: 0.95rem
+        &:focus
+            border-color: $primary-color
+            outline: none
+    textarea
+        min-height: 80px
+        resize: none
+
+    // --- Editor INACTIVE Display View (Simulated Answer Field) ---
+    // Targets Short Text, Long Text, Number when editor card is inactive
+    .display-view[disabled]:not([type="file"]) 
+        background-color: #f7f7f7 !important
+        border: 1px dashed #cccccc !important
+        cursor: pointer !important 
+
+// =========================================================
+// 🔑 PREVIEW MODE INPUT STYLES (Override Browser Defaults)
+// =========================================================
+
+.preview-input-field 
+    width: 100%
+    padding: 10px 12px
+    border: 1px solid #ccc 
+    border-radius: 4px
+    font-size: 0.95rem
+    color: $text-color 
+    background-color: white
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05)
+    transition: border-color 0.2s
+    margin-top: 10px
+    &:focus
+            border-color: $primary-color
+            outline: none
+
+    // 🛑 CRITICAL FIX: Override browser's default disabled appearance
+    // &[disabled] 
+    //     opacity: 1 !important // Prevents transparency/fading
+    //     cursor: default !important // Shows normal pointer or default text cursor
+    //     background-color: white !important // Prevents graying out
+    //     color: $text-color !important // Ensures text color is normal
+    //     box-shadow: none !important // Clean up the inner shadow
+
+// --- Dropdown Specifics (Functional Select) ---
+/* Container for the entire component - allows the list to float relative to it */
+.custom-dropdown-wrapper
+    position: relative;
+    width: 100%;
+    
+
+/* 1. Styling the Display Button (The field itself) */
+.dropdown-display-button
+    /* Mimic an elegant input field */
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    text-align: left;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    outline: none;
+    transition: all 0.2s;
+
+/* Focus state for the Display Button */
+.dropdown-display-button:focus
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+
+
+/* 2. Styling the Elegant Options List */
+.dropdown-options-list
+    left: 0;
+    z-index: 1000; 
+    width: 100%;
+    
+    list-style: none;
+    padding: 8px 0;
+    margin: 4px 0 10px 0; 
+    
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 6px; 
+    
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+    
+    /* 💥 CHANGES FOR SMOOTH TRANSITION: */
+    max-height: 200px; /* Keep the desired max height for scrolling */
+    overflow-y: auto;
+    
+    /* 🔑 KEY TRANSITION PROPERTIES */
+    opacity: 1; 
+    transition: opacity 0.3s ease-in-out, max-height 0.3s ease-in-out; 
+
+
+/* 3. Styling Individual Options */
+.dropdown-option-item
+    padding: 8px 15px;
+    font-size: 15px;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    
+/* Clean hover effect for Individual Options */
+.dropdown-option-item:hover
+    background-color: #f5f5f5;
+    color: #007bff;
+
+
+/* 4. Arrow Animation (for extra polish) */
+.dropdown-arrow
+    transition: transform 0.2s ease;
+    font-size: 0.8em;
+    color: #666;
+
+.dropdown-arrow.open
+    transform: rotate(-180deg);
+// =========================================================
+// EDITOR MODE CONFIG STYLES (Date Picker, Dropdown Options)
+// =========================================================
+
+.date-picker-config
+    display: flex
+    flex-direction: column
+    gap: 10px
+    .date-input
+        width: 100%
+        padding: 10px 12px
+        border: 1px solid $card-border-light
+        border-radius: 8px
+        font-size: 0.95rem
+        &:focus
+            border-color: $primary-color
+            outline: none
+    .date-format-options
+        display: flex
+        align-items: center
+        gap: 10px
+        .label
+            font-size: 0.9rem
+            font-weight: 500
+            color: $text-color
+        .format-btn
+            background: #f1eeee
+            border: 1px solid #ccc
+            color: $light-text
+            padding: 5px 10px
+            border-radius: 4px
+            font-size: 0.85rem
+            cursor: pointer
+            &.active
+                background-color: $primary-color
+                color: white
+                border-color: $primary-color
+            &:disabled
+                opacity: 0.6
+                cursor: not-allowed
+            
+.dropdown-config
+    display: flex
+    flex-direction: column
+    gap: 8px
+    .options-list
+        display: flex
+        flex-direction: column
+        gap: 8px
+    .dropdown-option-row
+        display: flex
+        align-items: center
+        gap: 10px 
+        
+        .option-text-input
+            flex-grow: 1
+            border: 1px solid $card-border-light
+            padding: 8px 10px
+            border-radius: 4px
+            font-size: 0.95rem
+            margin: 0 
+            &:focus
+                border-color: $primary-color
+            
+            // 🎯 Style for the option text when the card is INACTIVE (Display View)
+            &.display-view[disabled]
+                cursor: default !important 
+                color: $text-color
+                padding: 8px 10px 
+                background-color: #f7f7f7 !important
+                border: 1px dashed $border-color !important
+                border-radius: 8px
+                width: 100% 
+                
+        .remove-option-btn
+            display: flex 
+            align-items: center
+            justify-content: center
+            width: 24px 
+            height: 24px
+            min-width: 24px
+            min-height: 24px
+            padding: 0
+            margin: 0
+            color: $primary-color 
+            Background-color: white 
+            border: 1px solid #D8D8D8 
+            border-radius: 50% 
+            font-size: 12px 
+            line-height: 1 
+            cursor: pointer
+            flex-shrink: 0
+            &:hover
+                opacity: 0.8
+            display: none // Default hide
+        
+        &.editing-option-row
+            .option-text-input 
+                display: block
+            .remove-option-btn
+                display: block
+
+        &.display-option-row
+            .option-text-input 
+                display: block
+                width: 100%
+            .remove-option-btn
+                display: none
+
+    .add-option-btn
+        align-self: flex-start
+        background: none
+        border: 1px dashed $primary-color
+        color: $primary-color
+        padding: 8px 15px
+        border-radius: 6px
+        cursor: pointer
+        margin-top: 10px
+        font-weight: 500
+        display: flex
+        align-items: center
+        gap: 5px
+        &:hover
+            background-color: $secondary-color
+        &:disabled
+            opacity: 0.6
+            cursor: default
+            background-color: #f8f8f8 
+            border-color: #ccc
+            color: #ccc
+
+    .selection-type-group
+        display: flex
+        align-items: center
+        gap: 15px
+        margin-top: 15px
+        .label
+            font-size: 0.9rem
+            font-weight: 500
+            color: $text-color
+            
+        .type-option
+            display: flex
+            align-items: center
+            gap: 6px
+            color: $light-text
+            font-size: 0.85rem
+            cursor: pointer
+            
+            .custom-radio
+                content: ''
+                width: 14px
+                height: 14px
+                border: 2px solid $light-text 
+                border-radius: 50%
+                display: flex
+                align-items: center
+                justify-content: center
+                flex-shrink: 0
+
+            &.active
+                color: $text-color
+                .custom-radio
+                    border-color: $primary-color 
+                    background-color: white 
+                    position: relative 
+
+                    &:after
+                        content: ''
+                        display: block
+                        width: 6px
+                        height: 6px
+                        background: $primary-color
+                        border-radius: 50%
+                
+            &:hover:not(.active)
+                color: $text-color
+                .custom-radio
+                    border-color: $text-color 
+                    
+// File Upload Specific Styles
+.file-upload-config
+    input[type="file"]
+        border: 1px dashed #ccc 
+        padding: 30px
+        text-align: center
+        color: $light-text
+        height: auto
+        cursor: not-allowed
+    .file-limits
+        font-size: 0.9rem
+        font-weight: 500
+        color: $text-color
+        margin-top: 10px
+    .file-limits-details
+        font-size: 0.8rem
+        color: $light-text
+        margin-top: 5px
+    .file-limits-preview
+        font-size: 0.85rem
+        color: $light-text
+        margin-top: 5px

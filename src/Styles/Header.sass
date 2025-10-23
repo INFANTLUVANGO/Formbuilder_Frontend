@@ -1,0 +1,98 @@
+.app-header
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  height: 72px
+  background: #FFFFFF
+  border-bottom: 1px solid #e6e9ef
+  display: flex
+  align-items: center
+  justify-content: space-between
+  padding: 0 32px
+  box-shadow: 0px 4px 12px 0px #0000001F
+  z-index: 50
+  border-radius: 10px
+
+  .header-left
+    display: flex
+    align-items: center
+    gap: 14px
+
+    .breadcrumbs
+      display: flex
+      align-items: center
+      gap: 8px
+      font-size: 1rem
+      font-weight: 600
+      color: #333
+      letter-spacing: 0.3px
+
+      .home
+        display: flex
+        align-items: center
+        justify-content: center
+        background: #ffffff
+        border-radius: 8px
+        padding: 8px
+        transition: all 0.2s ease
+
+        .home-icon
+          font-size: 1.1rem
+          color: #8C8C8C
+          transition: transform 0.2s ease
+
+        &:hover
+          background: #8C8C8C
+          .home-icon
+            color: #fff
+            transform: scale(1.1)
+
+      .sep
+        color: #8C8C8C
+        font-weight: 900
+        font-size: 1.1rem
+        opacity: 0.8
+
+      .crumb
+        text-decoration: none
+        color: #8C8C8C
+        font-weight: 500
+        transition: all 0.2s ease
+        &.active
+          color: #262626
+          font-weight: 700
+        &:hover
+          text-decoration: underline
+
+// =========================================================
+// NEW VIEWER HEADER STYLES (for Preview/Submit Mode)
+// =========================================================
+
+.app-header.viewer-header
+  // Override base styles for the viewer mode// Slightly shorter than the editor header
+  padding: 0 40px // Increased padding to look better on a wide screen
+  background-color: #ffffff // Prominent purple background
+  justify-content: center// Push content to the left
+  border-bottom: none // Remove the light border
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) // Simpler shadow
+  border-radius: 0 // No rounded corners for a full-width bar effect
+
+  .header-left
+    // Hide the entire breadcrumb container in viewer mode
+    display: none !important
+
+  .form-viewer-title
+    display: flex
+    align-items: center
+    height: 100%
+    
+    .title-text
+      color: #262626// White text on purple background
+      font-size: 1.5rem
+      font-weight: 700
+      padding-bottom: 2px 
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
+      max-width: 600px

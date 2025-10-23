@@ -1,0 +1,77 @@
+$primary-color: #5D38DF // Deep Purple
+$secondary-color: #f7f3ff // Very Light Purple background
+$border-color: #e0e0e0 // Light gray for general borders
+$text-color: #1e1e1e // Dark text
+$light-text: #585561// Gray for placeholders/descriptions
+$char-count-color: #999999 // Light gray for counts
+$required-color: #e03b3b // Red for required indicators
+$footer-height: 60px;
+$card-border-light: #9281cf; // Light purple border for inputs
+
+
+            
+// Form Details Section (Configuration View)
+.form-details-section
+    padding: 5px 15px 20px 15px
+    background-color: white
+    border-radius: 6px
+
+    h2
+        font-size: 1.35rem
+        font-weight: 600
+        color: $text-color
+        margin-bottom: 30px
+        border-bottom: 1px solid #cccccc
+
+.input-group
+    margin-bottom: 2.5rem
+
+    label
+        display: block
+        font-weight: 500
+        color: $text-color
+        margin-bottom: 0.4rem
+
+        &.required::after
+            content: " *"
+            color: $required-color
+            font-weight: 600
+            position: relative
+            top: -2px
+
+
+    .input-container
+        position: relative
+
+        input, textarea
+            width: 100%
+            padding: 12px 15px
+            border: 1px solid $border-color
+            border-radius: 6px
+            font-size: 1rem
+            box-sizing: border-box
+            color: $text-color
+            &::placeholder
+                color: $light-text
+            &:focus
+                border-color: $primary-color
+                outline: none
+
+        textarea
+            min-height: 120px
+            resize: none 
+            line-height: 1.5
+
+        .char-count
+            position: absolute
+            right: 15px
+            color: $char-count-color
+            font-size: 0.8rem
+            top: 50%
+            transform: translateY(-50%)
+
+        &.textarea-container
+            .char-count
+                bottom: 12px
+                top: unset
+                transform: none 

@@ -1,0 +1,234 @@
+$primary-color: #5D38DF // Deep Purple
+$secondary-color: #f7f3ff // Very Light Purple background
+$border-color: #e0e0e0 // Light gray for general borders
+$text-color: #1e1e1e // Dark text
+$light-text: #585561 // Gray for placeholders/descriptions
+$char-count-color: #999999 // Light gray for counts
+$required-color: #e03b3b // Red for required indicators
+$footer-height: 60px;
+$card-border-light: #9281cf; // Light purple border for inputs
+
+.form-layout-builder
+    display: flex
+    gap: 20px
+    min-height: 75vh
+
+    .layout-sidebar
+        position: sticky
+        top: 80px
+        padding: 16px 24px
+        width: 332px
+        flex-shrink: 0
+        display: flex
+        flex-direction: column
+        gap: 18px
+        background-color: white
+        border-radius: 16px
+        border: 1px solid #e0e0e0
+        height: calc(100vh - 100px)
+        overflow-y: auto
+
+    .layout-canvas-wrapper
+        flex-grow: 1
+        background-color: #efe9e9 // Light background from image
+        padding: 30px 40px
+        border-radius: 16px
+        border: 1px solid #DBDBDB
+        max-height: calc(100vh - 100px)
+        overflow-y: auto
+        // Custom scrollbar
+        &::-webkit-scrollbar
+            width: 10px
+        &::-webkit-scrollbar-track
+            background: #f1f1f1
+            border-radius: 5px
+        &::-webkit-scrollbar-thumb
+            background: #9281cf
+            border-radius: 5px
+        &::-webkit-scrollbar-thumb:hover
+            background: $primary-color
+
+    .sidebar-tabs
+        display: flex
+        background-color: #f1eeee
+        width: 206px
+        height: 43px
+        justify-content: center
+        align-items: center
+        border-radius: 8px
+
+        .sidebar-tab
+            text-align: center
+            border-radius: 6px
+            padding: 6px 12px
+            font-size: 13.5px
+            height: 32px
+            width: 97px
+            font-weight: 600
+            cursor: pointer
+
+            &.active
+                color:#FFFF
+                background-color: $primary-color
+            &.disabled 
+                color: #262626
+                cursor: not-allowed
+                pointer-events: none 
+
+    .field-palette
+        display: flex
+        flex-direction: column
+        gap: 15px
+
+        .field-btn
+            display: flex
+            align-items: center
+            padding: 10px 15px
+            height: 60px
+            border: 1px solid #E3E3E3
+            border-radius: 8px
+            background-color: white
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05)
+            cursor: grab
+
+            &:hover
+                background-color: $secondary-color
+                border-color: $primary-color
+
+            .field-icon
+                color: $primary-color
+                margin-right: 15px
+                font-size: 1.1rem
+            span
+                font-size: 0.9rem
+                font-weight: 450
+                color: #262626
+
+    .combine
+        display: flex
+        flex-direction: column
+        gap: 0px
+
+        .header-label
+            padding: 6px 12px
+            font-size: 0.9rem
+            font-weight: 600
+            width: 120px
+            height: 32px
+            border-top-left-radius: 6px
+            border-top-right-radius: 6px
+            text-align: center
+            color: #FFFF
+            background-color: $primary-color
+
+        .form-header-card
+            cursor: pointer
+            padding: 32px
+            background-color: #ffffff
+            margin-bottom: 20px
+            border-top-right-radius: 1px
+            border-bottom-left-radius: 16px
+            border-bottom-right-radius: 16px
+            border-top: 8px solid $primary-color
+           
+
+            &.active
+                border-left: 8px solid $primary-color // Bolder left border
+                cursor: default // Indicate it's in edit mode
+            
+            // --- STYLES FOR DISPLAY/INACTIVE VIEW (Field Card Not Active) ---
+            &:not(.active) 
+                // 1. Hide edit controls, settings, and drag handles when inactive
+                .card-header-actions, .field-settings-footer 
+                    display: none
+
+                .content-line.display-view
+                    border: none !important
+                    padding: 0 0 10px 0 !important
+                    height: 30px
+                    margin-bottom: 0 !important
+                    cursor: pointer !important
+                    .field-description-input[disabled]
+                        background-color: white !important
+                        cursor: pointer !important
+                        // Hide placeholder text for a cleaner display preview
+                        &::placeholder
+                            color: transparent
+
+            .content-line
+                    display: flex
+                    align-items: center
+                    margin-bottom: 8px
+                    height: 40px
+                    padding: 10px 12px
+                    border: 1px solid $card-border-light
+                    border-radius: 8px
+                    &:hover
+                        border: 2px solid $primary-color
+
+            .header-input-title, .header-input-description
+                    border: none
+                    width: 100%
+                    padding: 5px 0
+                    background-color: transparent
+                    &:focus 
+                        outline: none
+
+            .header-input-title
+                    font-size: 18px
+                    color: #262626
+                    font-weight: 500
+
+
+            .header-input-description
+                    font-size: 16px
+                    font-weight: 400
+                    color: $light-text
+                    &::placeholder 
+                        color: $light-text
+
+            .char-count-header
+                    font-size: 0.8rem
+                    color: $light-text
+                    white-space: nowrap
+
+.questions-scroll
+    display: flex
+    flex-direction: column
+    gap: 20px
+    padding-bottom: 20px
+
+.drag-drop-area
+    height: 200px
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-direction: column
+    border: 2px dashed $primary-color
+    border-radius: 6px
+    background-color: #F2EFFC 
+    margin-bottom: 0
+    transition: all 0.2s ease
+    gap: 5px
+
+    &.drop-indicator 
+        height: 60px 
+        p
+            display: none 
+    
+    &.bottom-drop-area 
+        height: 80px
+        p
+            display: block
+        
+    &.empty-state 
+        height: 200px
+
+    .drag-icon
+        font-size: 25px 
+        color: $primary-color 
+    p
+        font-size: 14px
+        font-weight: 400
+        color: #262626
+        padding: 0 

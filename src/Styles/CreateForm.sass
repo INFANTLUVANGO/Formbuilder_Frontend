@@ -1,0 +1,782 @@
+// src/Styles/CreateForm.sass (Corrected Indentation)
+
+$primary-color: #5D38DF // Deep Purple
+$secondary-color: #f7f3ff // Very Light Purple background
+$border-color: #e0e0e0 // Light gray for general borders
+$text-color: #1e1e1e // Dark text
+$light-text: #6e6e6e // Gray for placeholders/descriptions
+$char-count-color: #999999 // Light gray for counts
+$required-color: #e03b3b // Red for required indicators
+$footer-height: 60px;
+$card-border-light: #9281cf; // Light purple border for inputs
+
+.form-builder-page
+    padding: 0 2rem 2rem 2rem
+    padding-bottom: $footer-height + 30px 
+    min-height: calc(100vh - 100px) 
+
+.form-tabs
+    display: flex
+    border-bottom: 1px solid $border-color
+    margin-bottom: 30px
+    background-color: white
+    border-radius: 5px
+    position: sticky
+    top: 0
+    z-index: 50
+
+    .tab
+        padding: 1rem 1.5rem
+        font-size: 1rem
+        cursor: pointer
+        transition: border-bottom 0.3s ease
+
+        &.active
+            color: $primary-color
+            border-bottom: 2px solid $primary-color
+            font-weight: 600
+
+        &.inactive
+            color: $light-text
+            border-bottom: 2px solid transparent 
+            
+// Form Details Section (Configuration View)
+.form-details-section
+    padding: 5px 15px 20px 15px
+    background-color: white
+    border-radius: 6px
+
+    h2
+        font-size: 1.35rem
+        font-weight: 600
+        color: $text-color
+        margin-bottom: 30px
+        border-bottom: 1px solid #cccccc
+
+.input-group
+    margin-bottom: 2.5rem
+
+    label
+        display: block
+        font-weight: 500
+        color: $text-color
+        margin-bottom: 0.4rem
+
+        &.required::after
+            content: " *"
+            color: $required-color
+            font-weight: 600
+            position: relative
+            top: -2px
+
+    .form-description-text
+        font-size: 0.9rem
+        color: $light-text
+        margin-top: -0.3rem
+        margin-bottom: 0.5rem
+
+    .input-container
+        position: relative
+
+        input, textarea
+            width: 100%
+            padding: 12px 15px
+            border: 1px solid $border-color
+            border-radius: 6px
+            font-size: 1rem
+            box-sizing: border-box
+            color: $text-color
+            &::placeholder
+                color: $light-text
+            &:focus
+                border-color: $primary-color
+                outline: none
+
+        textarea
+            min-height: 120px
+            resize: none 
+            line-height: 1.5
+
+        .char-count
+            position: absolute
+            right: 15px
+            color: $char-count-color
+            font-size: 0.8rem
+            top: 50%
+            transform: translateY(-50%)
+
+        &.textarea-container
+            .char-count
+                bottom: 12px
+                top: unset
+                transform: none 
+
+// --- Question Card Styling (Detailed) ---
+.field-card, .form-header-card
+    padding: 32px
+    background-color: #ffffff
+    border-top-right-radius: 1px
+    border-bottom-left-radius: 16px
+    border-bottom-right-radius: 16px
+    border-top: 8px solid $primary-color 
+    border-left: 4px solid $primary-color 
+    display: flex
+    flex-direction: column
+    gap: 12px
+    position: relative
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08)
+    cursor: grab
+    transition: all 0.2s ease // Smooth transition for active state
+
+    // ACTIVE STATE STYLES (The "Updated Mode" Look)
+    &.active
+        border-left: 8px solid $primary-color // Bolder left border
+        box-shadow: 0 8px 15px rgba($primary-color, 0.25) // Prominent shadow
+        cursor: default // Indicate it's in edit mode
+    
+    // --- STYLES FOR DISPLAY/INACTIVE VIEW (Field Card Not Active) ---
+    &:not(.active) 
+        // 1. Hide edit controls, settings, and drag handles when inactive
+        .card-header-actions, .field-settings-footer 
+            display: none
+        
+        // 2. Style the Question and Description inputs to look like plain text
+        .field-question-input[disabled]
+            border: none !important
+            padding: 10px 0 !important
+            cursor: pointer !important // Indicates clickability to re-edit
+            background-color: white !important
+            &:hover
+                text-decoration: underline
+
+        .field-description-line.display-view
+            border: none !important
+            padding: 0 0 10px 0 !important
+            margin-bottom: 0 !important
+            cursor: pointer !important
+            .field-description-input[disabled]
+                background-color: white !important
+                cursor: pointer !important
+                // Hide placeholder text for a cleaner display preview
+                &::placeholder
+                    color: transparent
+
+    .card-header-actions
+        position: absolute
+        top: 8px
+        right: 15px
+        display: flex
+        align-items: center
+        gap: 10px
+        z-index: 10
+        
+        .char-count-card
+            color: $char-count-color
+            font-size: 0.8rem
+            
+        .card-handle
+            font-size: 1.2rem
+            color: $light-text
+            transform: rotate(90deg)
+            line-height: 0
+            cursor: move
+            padding: 5px
+
+.field-question-input
+    height: 40px
+    padding: 10px 12px
+    border: 1px solid $card-border-light 
+    border-radius: 8px
+    font-size: 1rem
+    font-weight: 500
+    color: #262626
+    width: 100%
+    background-color: transparent
+    &:focus
+        outline: none
+        border-color: $primary-color
+        border-width: 2px
+
+// Description Input Styling: Matches the Header input line style
+.field-description-line
+    display: flex
+    align-items: center
+    padding: 10px 12px 
+    border: 1px solid $card-border-light
+    border-radius: 8px
+    margin-bottom: 15px 
+    margin-top: 10px
+    &:hover, &:focus-within
+        border: 2px solid $primary-color
+
+.field-description-input
+    border: none 
+    padding: 0 
+    font-size: 0.9rem
+    color: $light-text
+    width: 100%
+    &:focus
+        outline: none
+        
+.char-count-description
+    font-size: 0.8rem
+    color: $char-count-color
+    white-space: nowrap // Keep it on one line with the input
+
+.field-answer
+    // --- General Answer Input Styles for Display State ---
+    // General inputs (Short Text, Long Text, Number, File Upload)
+    .display-view[disabled]
+        background-color: #f7f7f7 !important // Light gray background for the answer field preview
+        border: 1px dashed #cccccc !important // Dashed border to look like an empty field
+        cursor: pointer !important // Inherits the parent card's click-to-edit action
+
+    // Specific style for the Date Picker input
+    .date-input.display-view[disabled]
+        border: 1px solid #cccccc !important
+        background-color: #ffffff !important
+        cursor: pointer !important
+
+    // General styles for answer inputs inside a card
+    input:not(.date-input, .toggle-switch, .option-preview-input), textarea, select
+        width: 100%
+        padding: 10px 12px
+        border: 1px solid $card-border-light
+        border-radius: 8px
+        margin-top: 10px
+        font-size: 0.95rem
+        &:focus
+            border-color: $primary-color
+            outline: none
+    textarea
+        min-height: 80px
+        resize: none
+
+    // Date Picker Specific Styles (and others) styles remain the same for brevity
+    .date-picker-config
+        display: flex
+        flex-direction: column
+        gap: 10px
+    .date-input
+        width: 100%
+        padding: 10px 12px
+        border: 1px solid $card-border-light
+        border-radius: 8px
+        font-size: 0.95rem
+        &:focus
+            border-color: $primary-color
+            outline: none
+    .date-format-options
+        display: flex
+        align-items: center
+        gap: 10px
+        .label
+            font-size: 0.9rem
+            font-weight: 500
+            color: $text-color
+        .format-btn
+            background: #f1eeee
+            border: 1px solid #ccc
+            color: $light-text
+            padding: 5px 10px
+            border-radius: 4px
+            font-size: 0.85rem
+            cursor: pointer
+            &.active
+                background-color: $primary-color
+                color: white
+                border-color: $primary-color
+            &:disabled
+                opacity: 0.6
+                cursor: not-allowed
+            
+    // Dropdown Specific Styles
+    .dropdown-config
+        display: flex
+        flex-direction: column
+        gap: 8px
+        .options-list
+            display: flex
+            flex-direction: column
+            gap: 8px
+        .dropdown-option-row
+            display: flex
+            align-items: center
+            gap: 10px
+            
+            // Preview Input (Radio/Checkbox) Styling
+            .option-preview-input
+                // Remove default styling of the input[type="radio/checkbox"]
+                -webkit-appearance: none
+                -moz-appearance: none
+                appearance: none
+                margin: 0 // Reset margin
+                width: 16px
+                min-width: 16px
+                height: 16px
+                border: 2px solid $light-text
+                background-color: transparent
+                cursor: default
+                pointer-events: none // Non-functional preview
+
+                &[type="radio"]
+                    border-radius: 50%
+                    &:checked
+                        border-color: $primary-color
+                        background-color: $primary-color
+                        // Inner dot for checked state
+                        &:after
+                            content: ''
+                            display: block
+                            width: 8px
+                            height: 8px
+                            background: white
+                            border-radius: 50%
+                            margin: 2px
+
+                &[type="checkbox"]
+                    border-radius: 3px
+                    &:checked
+                        border-color: $primary-color
+                        background-color: $primary-color
+                        // Simple checkmark graphic for checked state
+                        &:after
+                            content: '\2713' // Checkmark character
+                            font-size: 10px
+                            color: white
+                            display: block
+                            text-align: center
+                            line-height: 14px
+
+            // Editable Input (Option Text) Styling
+            .option-text-input
+                flex-grow: 1
+                border: 1px solid $card-border-light
+                padding: 8px 10px
+                border-radius: 4px
+                font-size: 0.95rem
+                margin: 0 // Reset margin inherited from general input styles
+                &:focus
+                    border-color: $primary-color
+                
+                // Style for the option text when the card is INACTIVE (Display View)
+                &.display-view[disabled]
+                    border: none !important
+                    background-color: transparent !important
+                    cursor: default !important 
+                    color: $text-color
+                    padding: 0 // Reduce padding to look like text label
+
+            // Visibility Toggles for Editing vs. Display
+            .remove-option-btn
+                display: none // Default hide
+            
+            &.editing-option-row
+                .option-preview-input 
+                    display: none // Hide the preview radio/checkbox when editing
+                .option-text-input 
+                    display: block
+                .remove-option-btn
+                    display: block
+
+            &.display-option-row
+                .option-preview-input 
+                    display: block // Show the preview radio/checkbox when in display mode
+                .option-text-input 
+                    display: block
+                .remove-option-btn
+                    display: none
+
+        .add-option-btn
+            align-self: flex-start
+            background: none
+            border: 1px dashed $primary-color
+            color: $primary-color
+            padding: 8px 15px
+            border-radius: 6px
+            cursor: pointer
+            margin-top: 10px
+            font-weight: 500
+            display: flex
+            align-items: center
+            gap: 5px
+            &:hover
+                background-color: $secondary-color
+            &:disabled
+                opacity: 0.6
+                cursor: default
+                background-color: #f8f8f8 
+                border-color: #ccc
+                color: #ccc
+
+        .selection-type-group
+            display: flex
+            align-items: center
+            gap: 15px
+            margin-top: 15px
+            padding-top: 10px
+            border-top: 1px solid $border-color
+            .label
+                font-size: 0.9rem
+                font-weight: 500
+                color: $text-color
+            .type-btn
+                background: #f1eeee
+                border: 1px solid #ccc
+                color: $light-text
+                padding: 5px 10px
+                border-radius: 4px
+                font-size: 0.85rem
+                cursor: pointer
+                &.active
+                    background-color: $primary-color
+                    color: white
+                    border-color: $primary-color
+                &:disabled
+                    opacity: 0.6
+                    cursor: not-allowed
+
+
+    // File Upload Specific Styles
+    .file-upload-config
+        input[type="file"]
+            border: 1px dashed #ccc 
+            padding: 30px
+            text-align: center
+            color: $light-text
+            height: auto
+            cursor: not-allowed
+        .file-limits
+            font-size: 0.9rem
+            font-weight: 500
+            color: $text-color
+            margin-top: 10px
+        .file-limits-details
+            font-size: 0.8rem
+            color: $light-text
+            margin-top: 5px
+
+.field-settings-footer
+    display: flex
+    justify-content: flex-end
+    align-items: center
+    padding-top: 15px
+    border-top: 1px solid $border-color
+    margin-top: 10px
+    gap: 15px
+
+    .action-btn
+        background: none
+        border: none
+        color: $light-text
+        cursor: pointer
+        font-size: 1.2rem
+        padding: 5px
+        border-radius: 4px
+        &:hover
+            background-color: #f0f0f0
+            color: $primary-color
+        &:disabled
+            opacity: 0.4
+            cursor: not-allowed
+            background: none
+            color: #ccc
+
+    .delete-field-btn
+        color: $required-color
+        margin-left: 5px
+    
+    .copy-field-btn
+        margin-right: auto // Pushes copy/delete to the left
+
+    .settings-group
+        display: flex
+        align-items: center
+        gap: 5px
+        font-size: 0.9rem
+        color: $text-color
+
+    // Toggle Switch (Replicating the visual switch)
+    .toggle-switch 
+        -webkit-appearance: none
+        -moz-appearance: none
+        appearance: none
+        width: 40px
+        height: 20px
+        border-radius: 10px // Rounded for Description toggle
+        background-color: #ccc 
+        transition: background-color 0.3s
+        cursor: pointer
+        position: relative
+        outline: none
+
+        &:before
+            content: ''
+            position: absolute
+            top: 2px
+            left: 2px
+            width: 16px
+            height: 16px
+            border-radius: 50%
+            background-color: white
+            transition: transform 0.3s
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2)
+
+        &:checked
+            background-color: $primary-color
+            &:before
+                transform: translateX(20px)
+
+.form-layout-builder
+    display: flex
+    gap: 20px
+    min-height: 75vh
+
+    .layout-sidebar
+        position: sticky
+        top: 80px
+        padding: 16px 24px
+        width: 332px
+        flex-shrink: 0
+        display: flex
+        flex-direction: column
+        gap: 18px
+        background-color: white
+        border-radius: 16px
+        border: 1px solid #e0e0e0
+        height: calc(100vh - 100px)
+        overflow-y: auto
+
+    .layout-canvas-wrapper
+        flex-grow: 1
+        background-color: #efe9e9 // Light background from image
+        padding: 30px 40px
+        border-radius: 16px
+        border: 1px solid #DBDBDB
+        max-height: calc(100vh - 100px)
+        overflow-y: auto
+        // Custom scrollbar
+        &::-webkit-scrollbar
+            width: 10px
+        &::-webkit-scrollbar-track
+            background: #f1f1f1
+            border-radius: 5px
+        &::-webkit-scrollbar-thumb
+            background: #9281cf
+            border-radius: 5px
+        &::-webkit-scrollbar-thumb:hover
+            background: $primary-color
+
+    .sidebar-tabs
+        display: flex
+        background-color: #f1eeee
+        width: 206px
+        height: 43px
+        justify-content: center
+        align-items: center
+        border-radius: 8px
+
+        .sidebar-tab
+            text-align: center
+            border-radius: 6px
+            padding: 6px 12px
+            font-size: 13.5px
+            height: 32px
+            width: 97px
+            font-weight: 600
+            cursor: pointer
+
+            &.active
+                color:#FFFF
+                background-color: $primary-color
+            &.disabled 
+                color: #262626
+                cursor: not-allowed
+                pointer-events: none 
+
+    .field-palette
+        display: flex
+        flex-direction: column
+        gap: 15px
+
+        .field-btn
+            display: flex
+            align-items: center
+            padding: 10px 15px
+            height: 60px
+            border: 1px solid #E3E3E3
+            border-radius: 8px
+            background-color: white
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05)
+            cursor: grab
+
+            &:hover
+                background-color: $secondary-color
+                border-color: $primary-color
+
+            .field-icon
+                color: $primary-color
+                margin-right: 15px
+                font-size: 1.1rem
+            span
+                font-size: 0.9rem
+                font-weight: 450
+                color: #262626
+
+    .combine
+        display: flex
+        flex-direction: column
+        gap: 0px
+
+        .header-label
+            padding: 6px 12px
+            font-size: 0.9rem
+            font-weight: 600
+            width: 120px
+            height: 32px
+            border-top-left-radius: 6px
+            border-top-right-radius: 6px
+            text-align: center
+            color: #FFFF
+            background-color: $primary-color
+
+        .form-header-card
+            cursor: pointer
+            padding: 32px
+            height: 180px
+            background-color: #ffffff
+            margin-bottom: 30px
+            border-top-right-radius: 1px
+            border-bottom-left-radius: 16px
+            border-bottom-right-radius: 16px
+            border-top: 8px solid $primary-color
+            border-left: 4px solid $primary-color
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08)
+
+            .header-content
+                .content-line
+                    display: flex
+                    align-items: center
+                    margin-bottom: 8px
+                    height: 40px
+                    padding: 10px 12px
+                    border: 1px solid $card-border-light
+                    border-radius: 8px
+                    &:hover
+                        border: 2px solid $primary-color
+
+                .header-input-title, .header-input-description
+                    font-weight: 500
+                    border: none
+                    width: 100%
+                    padding: 5px 0
+                    background-color: transparent
+                    &:focus 
+                        outline: none
+
+                .header-input-title
+                    font-size: 1rem
+                    color: #262626
+
+                .header-input-description
+                    font-size: 0.9rem
+                    color: $light-text
+                    &::placeholder 
+                        color: $light-text
+
+                .char-count-header
+                    font-size: 0.8rem
+                    color: $light-text
+                    white-space: nowrap
+
+.questions-scroll
+    display: flex
+    flex-direction: column
+    gap: 20px
+    padding-bottom: 20px
+
+.drag-drop-area
+    height: 200px
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-direction: column
+    border: 2px dashed $primary-color
+    border-radius: 6px
+    background-color: #F2EFFC 
+    margin-bottom: 0
+    transition: all 0.2s ease
+    gap: 5px
+
+    &.drop-indicator 
+        height: 60px 
+        p
+            display: none 
+    
+    &.bottom-drop-area 
+        height: 80px
+        p
+            display: block
+        
+    &.empty-state 
+        height: 200px
+
+    .drag-icon
+        font-size: 25px 
+        color: $primary-color 
+    p
+        font-size: 14px
+        font-weight: 400
+        color: #262626
+        padding: 0 
+
+.form-action-footer
+    position: fixed 
+    bottom: 0
+    left: 0
+    width: 100% 
+    display: flex
+    justify-content: flex-end
+    align-items: center 
+    padding: 15px 3rem 
+    height: $footer-height
+    background-color: white
+    border-top: 1px solid $border-color
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05)
+    z-index: 100 
+
+    button
+        padding: 10px 20px
+        border-radius: 6px
+        font-size: 1rem
+        font-weight: 500
+        cursor: pointer
+        transition: all 0.2s ease
+
+    .preview-btn
+        color: $primary-color
+        background: transparent
+        border: none
+        margin-right: auto
+        font-weight: 600
+        padding-left: 0 
+        &:hover 
+            text-decoration: underline; 
+
+    .save-draft-btn
+        background-color: white
+        color: $primary-color
+        border: 1px solid $primary-color
+        margin-right: 1rem
+
+    .next-btn, .publish-btn
+        background-color: $primary-color
+        color: white
+        border: 1px solid $primary-color
+
+    button:disabled
+        opacity: 0.4
+        cursor: not-allowed
+        border: 1px solid #ccc 
+        background-color: #f5f5f5 
+        color: #aaaaaa
