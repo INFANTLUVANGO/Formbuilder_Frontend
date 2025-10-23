@@ -10,14 +10,84 @@ $border: #e6e9ef
 $shadow: 0 6px 18px rgba(54, 57, 78, 0.06)
 $radius: 12px
 
+.empty-state-container
+  flex-grow: 1 // Takes up all available vertical space
+  display: flex
+  align-items: center
+  justify-content: center
+  width: 100%
+
+  .empty-state
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    padding: 60px 20px
+    text-align: center
+    max-width: 500px // Constraint the empty content width
+
+    .empty-page-image
+      width: 100%
+      max-width: 350px
+      height: auto
+      margin-bottom: 20px
+      opacity: 0.8
+
+    .temp
+      display: flex
+      align-items: center
+      justify-content: center
+      flex-direction: column
+      gap: 12px
+
+      .temp1
+        color: #262626
+        font-weight: 600
+        font-size: 24px
+        height: 20px
+        line-height: 20px
+        margin-bottom: 0
+
+      .temp2
+        font-size: 16px
+        color: $text-muted // Use the defined muted text color
+        letter-spacing: 0.2px
+        height: 22px
+        line-height: 22px
+
+      .create-btn-lg
+        background: #5D38DF
+        color: #fff
+        border: none
+        line-height: 20px
+        font-weight: 600
+        border-radius: 8px
+        padding: 12px 30px 12px 30px // Larger padding
+        font-size: 1.1rem // Larger font
+        transition: transform 0.12s ease
+        box-shadow: 0px 4px 8px 0px #00000029
+        cursor: pointer
+        &:active
+          transform: translateY(1px)
+
 .admin-home
   padding: 25px
   background-color: #ffff
-  border-radius:10px
-  display: flex;
-  flex-direction: column;
+  border-radius: 10px
+  display: flex
+  flex-direction: column
   height: 1000px
-  
+  &.modal-active 
+        // Style to disable and dim the background content
+        filter: blur(2px) grayscale(0.5)
+        pointer-events: none
+        user-select: none
+
+  // ----------------------------------------------------
+  // 🌟 NEW: Full container for the empty state
+  // This ensures the image/button takes up the main content area
+
+  // ----------------------------------------------------
 
   .home-header
     display: flex
@@ -36,36 +106,57 @@ $radius: 12px
       gap: 12px
       align-items: center
 
-      .search
-        padding: 6px 8px 6px 8px;
-        border-radius: 8px;
-        border: 1px solid #0000003D;
-        background: #fff;
-        color: #00000059;
-        width: 280px;
-        height: 40px;
+      .search-box
+        position: relative
+        display: flex
+        align-items: center
+        width: 280px // Match the original input width
+        height: 40px // Match the original input height
 
+        .search-icon
+            position: absolute
+            left: 10px // Position icon from the left edge
+            width: 18px // Adjust size as needed
+            height: 18px
+            z-index: 10 // Ensure the icon is above the input
 
-      .create-btn
-        background: #5D38DF;
-        color: #fff;
-        border: none;
+        // 🌟 UPDATED: Target the input inside the search-box
+        .search-input
+            // Reset styling to be full-width of the container
+            width: 100%
+            height: 100%
+            
+            // Crucial: Add padding-left to make room for the icon
+            padding: 6px 8px 6px 36px // Increased left padding (e.g., 36px)
+            
+            border-radius: 8px
+            border: 1px solid #0000003D
+            background: #fff
+            color: $text-muted // Use variable for consistency
+            box-sizing: border-box
+
+      .create-btn // Small create button for populated state
+        background: #5D38DF
+        color: #fff
+        border: none
         line-height: 20px
         font-weight: 600
-        border-radius: 8px;
-        padding: 8px 24px 8px 24px;
-        font-weight: 600;
-        transition: transform 0.12s ease;
-        box-shadow: 0px 4px 8px 0px #00000029;
+        border-radius: 8px
+        padding: 8px 24px 8px 24px
+        font-weight: 600
+        transition: transform 0.12s ease
+        box-shadow: 0px 4px 8px 0px #00000029
+        cursor: pointer
         &:active
           transform: translateY(1px)
 
-
+  // Styles for the container when forms exist
   .forms-container
     display: grid
     grid-template-columns: repeat(auto-fit, minmax(500px, 1fr))
     gap: 35px
     margin-top: 5px
+    flex-grow: 1 // Allows forms to take up space, pushing pagination down
 
   .loading
     padding: 40px 0
@@ -77,7 +168,7 @@ $radius: 12px
     justify-content: center
     align-items: center
     gap: 8px
-    margin-top: auto
+    margin-top: 20px // Pushes pagination to the bottom
 
     .page-btn, .page-number
       background: #fff
@@ -94,3 +185,114 @@ $radius: 12px
     .page-btn[disabled]
       opacity: 0.5
       cursor: not-allowed
+
+
+// --- Delete Modal Styles ---
+
+.delete-modal-overlay
+    position: fixed
+    top: 0
+    left: 0
+    width: 100vw
+    height: 100vh
+    background-color: rgba(0, 0, 0, 0.4) // Semi-transparent black background
+    display: flex
+    justify-content: center
+    align-items: center
+    z-index: 1000 // Ensures it's on top of everything
+
+.delete-modal-card
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    width: 450px;
+    max-width: 90%;
+    /* height: 250px; */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.3s ease-out;
+
+    .modal-card-header
+        display: flex
+        align-items: center
+        padding: 20px
+        background-color: #F3F2F3// Light red background for delete header (similar to FormCard BG)
+        border-bottom: 1px solid #f9dcdc
+
+        .status-badge.delete
+            background-color: #d9534f // Danger red circle background
+            width: 35px
+            height: 35px
+            border-radius: 50%
+            display: flex
+            align-items: center
+            justify-content: center
+            margin-right: 15px
+            
+            .status-indicator
+                color: white
+                font-size: 18px
+                font-weight: bold
+                line-height: 1 // Center the text/indicator
+
+        .header-info
+            .title-text
+                font-size: 18px;
+                font-weight: 700;
+                height: 20px;
+                color: #262626;
+    
+    .modal-card-content
+        padding: 16px 20px 18px 20px;
+        text-align: center
+
+        .message-title
+            font-size: 18px
+            font-weight: 600
+            color: #333
+            margin-bottom: 8px
+
+        .message-detail
+            font-size: 14px
+            color: #666
+            line-height: 1.4
+
+    .modal-card-actions
+        display: flex
+        justify-content: flex-end
+        padding: 15px 20px
+        border-top: 1px solid #eee
+        gap: 10px
+
+        button
+            padding: 8px 15px
+            border-radius: 4px
+            font-weight: 500
+            cursor: pointer
+            transition: background-color 0.2s
+            min-width: 80px // Ensure buttons are reasonably sized
+
+        .cancel-btn
+            background-color: #fff
+            box-shadow: 0px 4px 12px 0px #0000000A;
+            border: 1px solid #D8D8D8;
+            color: #5D38DF;
+            border-radius: 8px;
+            &:hover 
+                background-color: #f0f0f0
+
+        .delete-confirm-btn
+            background-color: #5D38DF;
+            border: 1px solid #D8D8D8;
+            border-radius: 8px;
+            font-size: 14px;
+            color: white;
+
+@keyframes fadeIn
+    from 
+        opacity: 0
+        transform: scale(0.95)
+    to
+        opacity: 1
+        transform: scale(1)

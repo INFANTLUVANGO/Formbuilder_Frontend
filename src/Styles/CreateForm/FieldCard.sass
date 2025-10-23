@@ -18,6 +18,7 @@ $card-border-light: #9281cf; // Light purple border for inputs
     border-bottom-left-radius: 16px
     border-bottom-right-radius: 16px
     border-top-left-radius: 16px
+    border: 1px solid #D8D8D8;
     cursor: grab
     margin-top: 10px
     transition: all 0.2s ease // Smooth transition for active state
@@ -173,6 +174,7 @@ $card-border-light: #9281cf; // Light purple border for inputs
             left: 2px
             width: 16px
             height: 16px
+            margin-left: 1px
             border-radius: 50%
             background-color: white
             transition: transform 0.3s
@@ -180,5 +182,6 @@ $card-border-light: #9281cf; // Light purple border for inputs
 
         &:checked
             background-color: $primary-color
+            margin-right: 1px
             &:before
                 transform: translateX(20px)

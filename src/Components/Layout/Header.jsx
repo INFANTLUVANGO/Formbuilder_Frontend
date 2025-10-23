@@ -3,18 +3,14 @@ import { Link, useLocation } from 'react-router-dom'
 // Replaced import FaHome from 'react-icons/fa' with an inline SVG equivalent for compatibility
 // import { FaHome } from 'react-icons/fa' 
 import "../../Styles/Header.sass";
+import Home from "../../assets/ic_round-home.png"
+import Arrow from "../../assets/Alt Arrow Right.png"
+
 
 // Home Icon SVG replacement for FaHome
 const HomeIcon = (props) => (
-    <svg 
-        {...props} 
-        xmlns="http://www.w3.org/2000/svg" 
-        viewBox="0 0 24 24" 
-        fill="currentColor" 
-        style={{ width: '1em', height: '1em', verticalAlign: 'middle' }}
-    >
-        <path d="M12 5.69l5 4.5V18h-2v-6H9v6H7v-7.81l5-4.5zM12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/>
-    </svg>
+    <img src={Home} alt=""  style={{width: 24,height: 24}}/>
+    
 );
 
 // Accepts pageTitleOverride (the form name/title)
@@ -60,12 +56,12 @@ const Header = ({ pageTitleOverride }) => {
 
     if (paths.length > 0) {
         // 1. FormBuilder Crumb (Always present on sub-pages)
-        crumbs.push(<span key="sep1" className="sep">›</span>);
+        crumbs.push(<img src={Arrow} alt=""  style={{width: 20}}/>);
         crumbs.push(<Link key="form" to="/" className="crumb">FormBuilder</Link>);
 
         // 2. Base Page Crumb (Create Form / Edit Form, etc.)
         if (baseTitle) {
-            crumbs.push(<span key="sep2" className="sep">›</span>);
+            crumbs.push(<img src={Arrow} alt=""  style={{width: 24,height: 24}}/>);
             
             if (isPreviewPage) {
                 // If on preview, link back to the base page (/create/:formId)
@@ -82,14 +78,14 @@ const Header = ({ pageTitleOverride }) => {
         
         // 3. 'Preview' Crumb (Only if applicable)
         if (isPreviewPage) {
-            crumbs.push(<span key="sep3" className="sep">›</span>);
+            crumbs.push(<img src={Arrow} alt=""  style={{width: 24,height: 24}}/>);
             // This is the final active crumb for the preview page
             crumbs.push(<span key="preview" className="crumb active">Preview</span>);
         }
 
     } else {
         // Root path
-        crumbs.push(<span key="sep" className="sep">›</span>);
+        crumbs.push(<img src={Arrow} alt=""  style={{width: 24,height: 24}}/>);
         crumbs.push(<span key="form" className="crumb active">FormBuilder</span>);
     }
 

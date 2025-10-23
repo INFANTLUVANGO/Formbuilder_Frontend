@@ -74,9 +74,21 @@ $card-border-light: #9281cf; // Light purple border for inputs
         border: none
         margin-right: auto
         font-weight: 600
-        padding-left: 0 
-        &:hover 
-            text-decoration: underline; 
+        border: 1px solid #B3B3
+        padding: 10px
+        
+        display: flex          
+        align-items: center    
+        gap: 8px               
+        cursor: pointer
+        
+        .action-icon           
+            width: 18px       
+            height: 18px
+    
+    
+    &:hover 
+        text-decoration: underline
 
     .save-draft-btn
         background-color: white

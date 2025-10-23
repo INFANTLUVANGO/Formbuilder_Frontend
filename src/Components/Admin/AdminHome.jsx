@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import FormCard from './FormCard'
 import "../../Styles/AdminHome.sass";
 import { useNavigate } from 'react-router-dom'
+import EmptyPage from "../../assets/EmptyPage.png"
+import Search from "../../assets/Search.png"
+import DeleteFormModal from './DeleteFormModal';
 
 const PAGE_SIZE = 9
 
@@ -62,6 +65,9 @@ export default function AdminHome () {
     const [loading, setLoading] = useState(false)
     const [openDropdownId, setOpenDropdownId] = useState(null)
 
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [formToDelete, setFormToDelete] = useState(null);
+
     const fetchForms = async (pageNumber) => {
         setLoading(true)
 
@@ -92,12 +98,32 @@ export default function AdminHome () {
 
     // Handler for deleting a form
     const handleDelete = (formId) => {
-        if (window.confirm("Are you sure you want to delete this form? This action cannot be undone.")) {
-            setLoading(true);
-            deleteFormFromLocal(formId);
-            // Re-fetch the current page to update the UI and pagination count
-            fetchForms(page); 
-            setOpenDropdownId(null); // Close the dropdown menu
+        const formToFind = forms.find(f => f.id === formId);
+        if (formToFind) {
+            setFormToDelete(formToFind);
+            setShowDeleteModal(true);
+            setOpenDropdownId(null); // Close the action dropdown
+        }
+    };
+
+    // 🌟 NEW: Final deletion logic executed by the modal's confirm button
+    const confirmDelete = (formId) => {
+        setLoading(true);
+        deleteFormFromLocal(formId);
+        
+        // After deletion, close modal, clear state, and refresh the current page
+        setShowDeleteModal(false);
+        setFormToDelete(null); 
+
+        const remainingForms = getLocalForms().length + generateSample(23).length;
+        const newTotalPages = Math.ceil(remainingForms / PAGE_SIZE);
+        let targetPage = page;
+
+        if (page > 1 && page > newTotalPages) {
+            targetPage = newTotalPages;
+            setPage(newTotalPages); // This triggers a re-fetch in useEffect
+        } else {
+            fetchForms(page); // Re-fetch the current page content
         }
     };
 
@@ -105,52 +131,98 @@ export default function AdminHome () {
     // Close dropdown if clicking outside
     useEffect(() => {
         const handleClickOutside = () => setOpenDropdownId(null)
-        document.addEventListener('click', handleClickOutside)
-        return () => document.removeEventListener('click', handleClickOutside)
-    }, [])
+        if (!showDeleteModal) {
+            document.addEventListener('click', handleClickOutside)
+            return () => document.removeEventListener('click', handleClickOutside)
+        }
+    }, [showDeleteModal])
 
     const goPrev = () => { if (page > 1) setPage(page - 1) }
     const goNext = () => { if (page < totalPages) setPage(page + 1) }
     const goto = (n) => { if (n >= 1 && n <= totalPages) setPage(n) }
 
+    //const isEmpty = !loading && forms.length === 0 && totalPages === 1;
+    const isEmpty = false;
+
     return (
-        <section className="admin-home">
-            <div className="home-header">
-                <h2>Form List</h2>
-                <div className="right-actions">
-                    <input className="search" placeholder="Search forms" />
-                    <button className="create-btn" onClick={handleCreate}>Create Form</button>
+
+        isEmpty ? (
+
+        <section className="empty-state-container">
+            <div className="empty-state">
+                <img src={EmptyPage} alt="No Forms Found" className="empty-page-image" />
+                <div className='temp'>
+                    <p className='temp1'>Create a Form Templete</p>
+                    <p className='temp2'>Create templates that can be used in various other features.</p>
+                    <button className="create-btn-lg" onClick={handleCreate}>
+                        Create Form
+                    </button>
                 </div>
             </div>
-
-            <div className="forms-container">
-                {loading ? (
-                    <div className="loading">Loading...</div>
-                ) : (
-                    forms.map(f => (
-                        <FormCard
-                            key={f.id}
-                            form={f}
-                            openDropdownId={openDropdownId}
-                            setOpenDropdownId={setOpenDropdownId}
-                            handleEdit={handleEdit}
-                            handleDelete={handleDelete} // Pass delete handler
-                        />
-                    ))
-                )}
-            </div>
-
-            <div className="pagination">
-                <button className="page-btn" onClick={goPrev} disabled={page === 1}>Prev</button>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(n => (
-                    <button
-                        key={n}
-                        className={`page-number ${n === page ? 'active' : ''}`}
-                        onClick={() => goto(n)}
-                    >{n}</button>
-                ))}
-                <button className="page-btn" onClick={goNext} disabled={page === totalPages}>Next</button>
-            </div>
         </section>
+
+        ) : (
+
+        <>
+            {/* 🌟 MODAL RENDERING */}
+            {showDeleteModal && formToDelete && (
+                <DeleteFormModal
+                    form={formToDelete}
+                    onCancel={() => setShowDeleteModal(false)}
+                    onConfirm={confirmDelete}
+                />
+            )}
+            
+            <section className={`admin-home ${showDeleteModal ? 'modal-active' : ''}`}> 
+                <div className="home-header">
+                    <h2>Form List</h2>
+                    <div className="right-actions">
+                        <div className="search-box">
+                            <img src={Search} alt="Search" className="search-icon" />
+                            <input 
+                                className="search-input"
+                                placeholder="Search forms" 
+                                disabled={showDeleteModal} // Disable input when modal is active
+                            />
+                        </div>
+                        <button className="create-btn" onClick={handleCreate} disabled={showDeleteModal}>Create Form</button>
+                    </div>
+                </div>
+
+                <div className="forms-container">
+                    {loading ? (
+                        <div className="loading">Loading...</div>
+                    ) : (
+                        forms.map(f => (
+                            <FormCard
+                                key={f.id}
+                                form={f}
+                                openDropdownId={openDropdownId}
+                                setOpenDropdownId={setOpenDropdownId}
+                                handleEdit={handleEdit}
+                                handleDelete={handleDelete}
+                                disabled={showDeleteModal} // Pass disabled state to FormCard
+                            />
+                        ))
+                    )}
+                </div>
+
+                <div className="pagination">
+                    <button className="page-btn" onClick={goPrev} disabled={page === 1 || showDeleteModal}>Prev</button>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(n => (
+                        <button
+                            key={n}
+                            className={`page-number ${n === page ? 'active' : ''}`}
+                            onClick={() => goto(n)}
+                            disabled={showDeleteModal}
+                        >{n}</button>
+                    ))}
+                    <button className="page-btn" onClick={goNext} disabled={page === totalPages || showDeleteModal}>Next</button>
+                </div>
+            </section>
+        </>
+        )
+
+        
     )
 }

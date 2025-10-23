@@ -8,6 +8,16 @@ $required-color: #e03b3b // Red for required indicators
 $footer-height: 60px;
 $card-border-light: #9281cf; // Light purple border for inputs
 
+// --- NEW COLOR VARIABLES FOR FIELD ICONS ---
+$color-shorttext: #CBE3FE
+$color-longtext: #7B61FF40
+$color-date: #BBE9E4
+$color-dropdown: #DBF3CC
+$color-fileupload: #E7CCF3
+$color-number: #F3CCE1
+// -------------------------------------------
+
+
 .form-layout-builder
     display: flex
     gap: 20px
@@ -27,6 +37,10 @@ $card-border-light: #9281cf; // Light purple border for inputs
         border: 1px solid #e0e0e0
         height: calc(100vh - 100px)
         overflow-y: auto
+        &.disabled
+            opacity: 0.6 // Visually dim the sidebar
+            pointer-events: none // Crucial: Prevents all mouse interaction (click, hover, drag)
+            cursor: default
 
     .layout-canvas-wrapper
         flex-grow: 1
@@ -95,10 +109,38 @@ $card-border-light: #9281cf; // Light purple border for inputs
                 background-color: $secondary-color
                 border-color: $primary-color
 
+            // === NEW WRAPPER STYLES for 30px BG ===
+            .icon-bg-wrapper
+                display: flex
+                justify-content: center
+                align-items: center
+                width: 30px
+                height: 30px
+                border-radius: 6px
+                flex-shrink: 0 // Prevent shrinking in flex
+                margin-right: 15px // Moved margin here from .field-icon
+                
+                // Color mapping
+                &.shorttext
+                    background-color: $color-shorttext
+                &.longtext
+                    background-color: $color-longtext
+                &.datepicker
+                    background-color: $color-date
+                &.dropdown
+                    background-color: $color-dropdown
+                &.fileupload
+                    background-color: $color-fileupload
+                &.number
+                    background-color: $color-number
+
+            // === UPDATED STYLES FOR IMAGE ICON (20px) ===
             .field-icon
-                color: $primary-color
-                margin-right: 15px
-                font-size: 1.1rem
+                width: 20px 
+                height: 20px 
+                // Removed margin-right, which is now on the wrapper
+            // ======================================
+            
             span
                 font-size: 0.9rem
                 font-weight: 450
@@ -126,11 +168,11 @@ $card-border-light: #9281cf; // Light purple border for inputs
             padding: 32px
             background-color: #ffffff
             margin-bottom: 20px
-            border-top-right-radius: 1px
+            border-top-right-radius: 8px
             border-bottom-left-radius: 16px
             border-bottom-right-radius: 16px
             border-top: 8px solid $primary-color
-           
+            
 
             &.active
                 border-left: 8px solid $primary-color // Bolder left border
@@ -224,11 +266,14 @@ $card-border-light: #9281cf; // Light purple border for inputs
     &.empty-state 
         height: 200px
 
+    // === UPDATED STYLES FOR IMAGE ICON IN DRAG AREA ===
     .drag-icon
-        font-size: 25px 
-        color: $primary-color 
+        width: 25px          // Set width equal to previous font-size
+        height: 25px         // Set height equal to previous font-size
+    // =================================================
+
     p
         font-size: 14px
         font-weight: 400
         color: #262626
-        padding: 0 
+        padding: 0
