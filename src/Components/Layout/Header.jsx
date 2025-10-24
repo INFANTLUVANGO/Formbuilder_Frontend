@@ -1,8 +1,9 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 // Replaced import FaHome from 'react-icons/fa' with an inline SVG equivalent for compatibility
 // import { FaHome } from 'react-icons/fa' 
 import "../../Styles/Header.sass";
+
 import Home from "../../assets/ic_round-home.png"
 import Arrow from "../../assets/Alt Arrow Right.png"
 
@@ -13,15 +14,39 @@ const HomeIcon = (props) => (
     
 );
 
+
 // Accepts pageTitleOverride (the form name/title)
 const Header = ({ pageTitleOverride }) => {
     const location = useLocation();
+    const navigate = useNavigate();
     const paths = location.pathname.split('/').filter(Boolean); // e.g., ['create', '123'] or ['preview', '123']
     
-    // 🎯 Identify the main page route and if we are in preview mode
+
     const mainRoute = paths[0];
-    const isPreviewPage = mainRoute === 'preview';
+    const isPreviewPage = mainRoute === 'preview';
+    const formId = isPreviewPage && paths.length > 1 ? paths[1] : null;
+
+    // 2. 🔑 DEFINE handleGoBack SECOND
+  const handleGoBack = () => {
+    // The targetPath now correctly uses the formId from the outer scope
+    const targetPath = `/create/${formId}`;
     
+        // 🚨 DEBUG STEP: Check what path is being generated.
+    console.log("Current Path:", location.pathname);
+    console.log("Extracted Form ID:", formId); // Will now show the ID or null
+    console.log("Attempting Navigation To:", targetPath); 
+    // ----------------------------------------------------
+
+    if (formId) {
+      navigate(targetPath);
+    } else {
+      // Fallback
+      console.error("Form ID not found. Falling back to history.");
+      navigate(-1);
+    }
+  };
+    // 🎯 Identify the main page route and if we are in preview mode
+   
     // Determine the title for the first crumb (the editor/main page)
     let baseTitle = '';
     let baseLinkPath = ''; // Path to link back to the editor (e.g., /create/123)
@@ -99,6 +124,17 @@ const Header = ({ pageTitleOverride }) => {
             {isFormViewer ? (
                 // New header style for Preview/Learner views (prominent form name)
                 <div className="form-viewer-title">
+                    <button 
+                        onClick={handleGoBack} // Use the received navigation handler
+                        className="back-icon-btn" 
+                        aria-label="Go Back"
+                    >
+                        {/* Added stroke="#262626" to ensure visibility if CSS color isn't applied */}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#262626" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </button>
                     <div className="title-text">{pageTitleOverride}</div>
                 </div>
             ) : (

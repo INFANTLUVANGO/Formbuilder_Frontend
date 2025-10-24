@@ -77,17 +77,122 @@
     // Hide the entire breadcrumb container in viewer mode
     display: none !important
 
-  .form-viewer-title
+  .app-header
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  height: 72px
+  background: #FFFFFF
+  border-bottom: 1px solid #e6e9ef
+  display: flex
+  align-items: center
+  justify-content: space-between
+  padding: 0 32px
+  box-shadow: 0px 4px 12px 0px #0000001F
+  z-index: 50
+  border-radius: 10px
+
+  .header-left
     display: flex
     align-items: center
-    height: 100%
-    
-    .title-text
-      color: #262626// White text on purple background
-      font-size: 1.5rem
-      font-weight: 700
-      padding-bottom: 2px 
-      white-space: nowrap
-      overflow: hidden
-      text-overflow: ellipsis
-      max-width: 600px
+    gap: 14px
+
+    .breadcrumbs
+      display: flex
+      align-items: center
+      gap: 8px
+      font-size: 1rem
+      font-weight: 600
+      color: #333
+      letter-spacing: 0.3px
+
+      .home
+        display: flex
+        align-items: center
+        justify-content: center
+        background: #ffffff
+        border-radius: 8px
+        transition: all 0.2s ease
+
+        .home-icon
+          font-size: 1.4rem
+          color: #8C8C8C
+          transition: transform 0.2s ease
+
+        
+
+      .sep
+        color: #8C8C8C
+        font-weight: 900
+        font-size: 1.1rem
+        opacity: 0.8
+
+      .crumb
+        text-decoration: none
+        color: #8C8C8C
+        font-weight: 500
+        transition: all 0.2s ease
+        &.active
+          color: #262626
+          font-weight: 700
+        &:hover
+          text-decoration: underline
+
+// =========================================================
+// NEW VIEWER HEADER STYLES (for Preview/Submit Mode)
+// =========================================================
+// =========================================================
+// NEW VIEWER HEADER STYLES (for Preview/Submit Mode)
+// =========================================================
+
+.app-header.viewer-header
+    // Override base styles for the viewer mode
+    padding: 0 40px // Increased padding on the header itself
+    background-color: #ffffff 
+    justify-content: center // This centers the child content (.form-viewer-title)
+    border-bottom: none
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+    border-radius: 0 
+
+    .header-left
+        display: none !important
+
+    .form-viewer-title
+        display: flex
+        align-items: center
+        justify-content: center // This centers the title-text
+        height: 100%
+        width: 100%
+        position: relative // 🔑 CRITICAL: This enables absolute positioning of the child icon.
+
+        .back-icon-btn
+            position: absolute
+            left: 0 // Align to the very left edge of the .form-viewer-title container
+            top: 50% 
+            transform: translateY(-50%) 
+
+            // Button reset styles
+            background: none
+            border: none
+            cursor: pointer
+            color: #262626
+            padding: 8px // Add click area padding
+            margin-left: -8px // 🔑 Use negative margin to pull the button into the 40px padding area visually.
+            z-index: 10 // Ensure it's above the title text if there's any overlap
+
+            svg
+                display: block
+                width: 24px
+                height: 24px
+                stroke-width: 2.5px
+        
+        .title-text
+            color: #262626
+            font-size: 1.5rem
+            font-weight: 700
+            padding-bottom: 2px 
+            white-space: nowrap
+            overflow: hidden
+            text-overflow: ellipsis
+            max-width: 600px

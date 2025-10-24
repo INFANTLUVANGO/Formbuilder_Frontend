@@ -96,7 +96,7 @@ const CreateForm = () => {
 
     // 🌟 1. NEW STATE: Flag to make the component read-only (used for both 'View Form' and 'View Responses')
     const [isReadOnly, setIsReadOnly] = useState(false);
-    
+    const [formVisibility, setFormVisibility] = useState(false);
     const [draggedField, setDraggedField] = useState(null);
     const [formFields, setFormFields] = useState([]);
     const [dragOverIndex, setDragOverIndex] = useState(null);
@@ -123,8 +123,9 @@ const CreateForm = () => {
                 setFormDescription(existingForm.formDes || '');
                 setHeaderName(existingForm.HeaderName || existingForm.title || '');
                 setHeaderDescription(existingForm.HeaderDescription || '');
-                setFormFields(existingForm.formFields || []);
-                
+                setFormFields(existingForm.formFields || []);   
+
+                setFormVisibility(existingForm.formVisibility || false);
                 // Set the initial view based on the URL path
                 setView(isViewingResponses ? 'responses' : 'config'); 
             } else if (isNewOrDraft) {
@@ -137,22 +138,23 @@ const CreateForm = () => {
             setHeaderName(''); 
             setFormDescription('');
             setHeaderDescription('');
+            setFormVisibility(false);
             setFormFields([]);
             setView('config');
         }
     }, [urlFormId, navigate, location.pathname]);
 
 
-    const saveFormToLocal = (status) => {
+    const saveFormToLocal = (status,formVisibility) => {
         const title = formName.trim() || 'Untitled Form';
         const formDes = formDescription.trim() || 'Description';
-        
         const newForm = {
             id: currentFormId,
             title: title, 
             formDes:formDes,
             HeaderName: HeaderName.trim() || title, 
             status: status,
+            formVisibility: formVisibility,
             HeaderDescription: HeaderDescription,
             formFields: formFields, 
             [status === 'published' ? 'publishedBy' : 'createdBy']: 'Current User', 
@@ -202,11 +204,31 @@ const CreateForm = () => {
     };
     
     const handleSave = () => {
-        if (isReadOnly) return; // Prevent action if read-only
         saveFormToLocal('draft');
         console.log(`Form '${formName}' saved as draft!`);
         navigate('/');
     };
+
+    const handleSaveVisibility = () => {
+        if (!currentFormId) return; 
+
+        const existingForm = getFormById(currentFormId);
+        if (!existingForm) return;
+
+        // Use the existing form status (draft or published)
+        // and the NEW formVisibility state from the toggle
+        let forms = getLocalForms();
+        const updatedForms = forms.map(form => 
+            form.id.toString() === existingForm.id.toString()
+                ? { ...form, formVisibility: formVisibility } 
+                : form
+        );
+        localStorage.setItem('forms', JSON.stringify(updatedForms));
+        navigate('/');
+
+        console.log(`Form visibility updated to: ${formVisibility ? 'ON' : 'OFF'}`);
+        
+    };
 
     const handlePublish = () => {
         if (isReadOnly) return; // Prevent action if read-only
@@ -337,6 +359,38 @@ const CreateForm = () => {
         }));
     };
 
+    const handleCopyField = (id) => {
+        if (isReadOnly) return;
+
+        if (formFields.length >= MAX_QUESTIONS) {
+            alert(`Maximum number of questions (${MAX_QUESTIONS}) reached.`);
+            return;
+        }
+
+        const indexToCopy = formFields.findIndex(f => f.id === id);
+        if (indexToCopy === -1) return;
+
+        const originalField = formFields[indexToCopy];
+        
+        // Deep copy the field to ensure no shared references, especially for array/object properties like 'options'
+        const copiedField = JSON.parse(JSON.stringify(originalField));
+
+        // Assign a new unique ID to the copy
+        copiedField.id = Date.now() + Math.random();
+        
+        // Optional: Prepend a phrase to the question to indicate it's a copy
+        copiedField.question = `Copy of ${originalField.question}`;
+
+        const newFields = [...formFields];
+        // Insert the copy immediately after the original field
+        newFields.splice(indexToCopy + 1, 0, copiedField);
+
+        setFormFields(newFields);
+        setActiveFieldId(copiedField.id); // Make the new copy active
+    };
+
+
+
     return (
         <div className="form-builder-page">
             <div className="form-tabs">
@@ -364,6 +418,8 @@ const CreateForm = () => {
                     setFormName={handleFormNameChange} 
                     formDescription={formDescription}
                     setFormDescription={setFormDescription}
+                    formVisibility={formVisibility}
+                    setFormVisibility={setFormVisibility}
                     isError={formNameError} 
                     isReadOnly={isReadOnly} 
                 />
@@ -384,7 +440,7 @@ const CreateForm = () => {
                     handleAddOption={handleAddOption}
                     handleUpdateOption={handleUpdateOption}
                     handleDeleteOption={handleDeleteOption}
-                    
+                    handleCopyField={handleCopyField}
                     HeaderName={HeaderName}
                     setHeaderName={setHeaderName}
                     HeaderDescription={HeaderDescription} 
@@ -423,7 +479,17 @@ const CreateForm = () => {
                             <button className="next-btn publish-btn" onClick={handlePublish} disabled={!formName.trim()}>Publish Form</button>
                         )}
                     </>
-                )}
+                )} 
+                {isReadOnly && (
+                
+                      <>
+                      <button 
+                            className="save-draft-btn" 
+                            onClick={handleSaveVisibility} 
+                        >
+                            Save
+                        </button></>
+                )}
             </div>
         </div>
     );

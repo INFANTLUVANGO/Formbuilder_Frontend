@@ -108,3 +108,30 @@
       border-radius: 6px
       font-weight: 700
       cursor: pointer
+
+    .status-toggle-wrapper
+      display: flex
+      align-items: center
+      gap: 8px
+      
+      .status-label
+          font-size: 15px;
+          color: #585561;
+          font-weight: 500;
+
+        
+    .visibility-toggle
+        .toggle-label
+            width: 36px  
+            height: 20px 
+            
+        .toggle-button
+            width: 14px 
+            height: 14px
+            top: 3px
+            left: 3px
+
+        // Calculate movement: (Toggle Width) - (Button Size) - (2 * Padding)
+        // 38px - 16px - 4px = 18px
+        .toggle-checkbox:checked + .toggle-label .toggle-button
+            transform: translateX(16px)

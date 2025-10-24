@@ -19,6 +19,7 @@ const LayoutView = ({
     setActiveFieldId,
     handleUpdateField,
     handleDeleteField,
+    handleCopyField,
     handleAddOption,
     handleUpdateOption,
     handleDeleteOption,
@@ -156,7 +157,8 @@ const LayoutView = ({
                                 setDragOverIndex={handleThrottledDragOver}
                                 handleUpdateField={handleUpdateField}
                                 handleDeleteField={handleDeleteField}
-                                handleAddOption={handleAddOption}
+                                handleCopyField={handleCopyField}
+                                handleAddOption={handleAddOption}
                                 handleUpdateOption={handleUpdateOption}
                                 handleDeleteOption={handleDeleteOption}
                                 isPreviewMode={false}

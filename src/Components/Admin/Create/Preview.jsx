@@ -25,6 +25,8 @@ const Preview = () => {
     const { formId } = useParams();
     const navigate = useNavigate();
 
+
+
     const [formData, setFormData] = useState(null);
     const [loading, setLoading] = useState(true);
     
@@ -85,7 +87,7 @@ const Preview = () => {
     }
     
     return (
-        <Layout pageTitleOverride={headerTitle}>
+        <Layout pageTitleOverride={headerTitle} >
             <div className="form-preview-page"> 
                 
                 <div className="form-preview-wrapper"> 

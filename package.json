@@ -12,10 +12,10 @@
   "dependencies": {
     "20": "^1.0.0",
     "@fullpage/react-fullpage": "^0.1.48",
+    "@hello-pangea/dnd": "^18.0.1",
     "framer-motion": "^12.0.6",
     "fullpage.js": "^4.0.34",
     "react": "^19.0.0",
-    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^19.0.0",
     "react-fullpage": "^0.1.16",
     "react-icons": "^5.5.0",

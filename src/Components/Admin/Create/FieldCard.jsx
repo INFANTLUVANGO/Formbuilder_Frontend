@@ -3,6 +3,7 @@ import { FaCopy, FaTrash } from 'react-icons/fa';
 import AnswerInput from "./AnswerInput";
 import "../../../Styles/CreateForm/FieldCard.sass"
 
+
 // 1. 🔑 ACCEPT NEW PROPS: answerValue and handleAnswerChange
 const FieldCard = ({ 
     field, 
@@ -11,7 +12,6 @@ const FieldCard = ({
     setActiveFieldId, 
     handleDragStart, 
     handleDragEnd, 
-    dragOverIndex, 
     setDragOverIndex, 
     handleUpdateField, 
     handleDeleteField, 
