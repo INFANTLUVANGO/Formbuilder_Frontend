@@ -4,56 +4,59 @@ import AnswerInput from "./AnswerInput";
 import "../../../Styles/CreateForm/FieldCard.sass"
 
 
-// 1. 🔑 ACCEPT NEW PROPS: answerValue and handleAnswerChange
 const FieldCard = ({ 
-    field, 
-    index, 
-    activeFieldId, 
-    setActiveFieldId, 
-    handleDragStart, 
-    handleDragEnd, 
-    setDragOverIndex, 
-    handleUpdateField, 
-    handleDeleteField, 
-    handleAddOption, 
-    handleUpdateOption, 
-    handleDeleteOption, 
-    handleCopyField, 
-    isPreviewMode,
-    // 🛑 NEW PROPS HERE:
-    answerValue, 
-    handleAnswerChange 
+  field, 
+  index, 
+  activeFieldId, 
+  setActiveFieldId, 
+  handleDragStart, 
+  handleDragEnd, 
+  setDragOverIndex, 
+  handleUpdateField, 
+  handleDeleteField, 
+  handleAddOption, 
+  handleUpdateOption, 
+  handleDeleteOption, 
+  handleCopyField, 
+  isPreviewMode,
+  // 🔑 Mode Props
+  isLearnerSubmission,
+    isViewSubmission, // <== CRITICAL: For read-only view
+  // Answer Props
+  answerValue, 
+  handleAnswerChange 
 }) => {
-    
-    // Determine if we are in the Preview state
-    const isPreview = isPreviewMode;
-    
-    // If in Preview mode, no field can be active for editing
-    const isFieldActive = isPreview ? false : field.id === activeFieldId;
+  
+  // Disable editing functionality if in Preview, Learner Submission, or View Submission mode.
+    const isEditingDisabled = isPreviewMode || isViewSubmission || isLearnerSubmission;
+  const isFieldActive = isEditingDisabled ? false : field.id === activeFieldId;
 
-    return (
-        <div 
-            // 💡 ADDED: Conditionally add 'preview-mode' class
-            className={`form-field-card ${isFieldActive ? 'active' : ''} ${isPreview ? 'preview-mode' : ''}`}
-            
-            // 🛑 REMOVE BUILDER FUNCTIONALITY IN PREVIEW
-            draggable={!isPreview} 
-            onDragStart={!isPreview ? () => handleDragStart(field) : undefined}
-            onDragEnd={!isPreview ? handleDragEnd : undefined} 
-            onDragOver={!isPreview ? (e) => { e.preventDefault(); setDragOverIndex(index); } : undefined}
-            onDragLeave={!isPreview ? () => setDragOverIndex(null) : undefined}
-            onClick={!isPreview ? () => setActiveFieldId(field.id) : undefined} // Only allow activation in editor mode
-        >
-            
-            <div className="field-content">
-                
-                {/* 1. Question Title Rendering */}
+  // 🔑 NEW: Define a single flag for all read-only display modes
+    const isDisplayMode = isPreviewMode || isViewSubmission || isLearnerSubmission;
+    // The content line should be in 'display-view' if it's NOT the active editor or it IS one of the display modes
+    const showDisplayView = isDisplayMode || !isFieldActive;
+
+  return (
+    <div 
+      className={`form-field-card ${isFieldActive ? 'active' : ''} ${isEditingDisabled ? 'preview-mode' : ''}`}
+      
+      // Disable builder functions (drag/click-to-edit) in all non-editor modes
+      draggable={!isEditingDisabled} 
+      onDragStart={!isEditingDisabled ? () => handleDragStart(field) : undefined}
+      onDragEnd={!isEditingDisabled ? handleDragEnd : undefined} 
+      onDragOver={!isEditingDisabled ? (e) => { e.preventDefault(); setDragOverIndex(index); } : undefined}
+      onDragLeave={!isEditingDisabled ? () => setDragOverIndex(null) : undefined}
+      onClick={!isEditingDisabled ? () => setActiveFieldId(field.id) : undefined} 
+    >
+      
+        <div className="field-content">
+
                 <div className={`field-content-line ${!isFieldActive ? 'display-view' : ''}`}>
-                    {isPreview || !isFieldActive ? (
+                    {showDisplayView || !isFieldActive ? (
                         // PREVIEW MODE or inactive display mode in builder
                         <div className="field-question-display">
                             {/* 🔑 FIX: Render the number inside the display element for clean alignment */}
-                            {isPreview && (
+                            {(isPreviewMode || isLearnerSubmission || isViewSubmission) && (
                                 <div className={`question-number-display preview-number`}>
                                     {index + 1}
                                 </div>
@@ -80,8 +83,8 @@ const FieldCard = ({
 
                 {/* 2. Description (Only display if showDescription is true) */}
                 {field.showDescription && (
-                    <div className={`field-content-line description-line ${!isFieldActive ? 'display-view' : ''} ${isPreview ? 'description-preview' : ''}`}> 
-                        {isPreview || !isFieldActive ? (
+                    <div className={`field-content-line description-line ${!isFieldActive ? 'display-view' : ''} ${showDisplayView ? 'description-preview' : ''}`}> 
+                        {showDisplayView|| !isFieldActive ? (
                             // PREVIEW MODE / Inactive Builder: Display static text
                             <p className="field-description-display">
                                 {field.description}
@@ -103,41 +106,48 @@ const FieldCard = ({
                         )}
                     </div>
                 )}
+        
+            {/* 3. Answer Input Rendering */}
+            <div className="field-answer">
+            <AnswerInput 
+                field={field} 
+                activeFieldId={activeFieldId} 
+                handleUpdateField={handleUpdateField} 
+                handleAddOption={handleAddOption} 
+                handleUpdateOption={handleUpdateOption} 
+                handleDeleteOption={handleDeleteOption} 
+                
+                            // 🔑 PASS ALL MODE FLAGS DOWN
+                isPreviewMode={isPreviewMode}
+                            isLearnerSubmission={isLearnerSubmission}
+                            isViewSubmission={isViewSubmission} // <== CRITICAL
+                            
+                // Answer props
+                answerValue={answerValue}
+                handleAnswerChange={handleAnswerChange}
+            />
+            </div>
 
-                {/* 3. Answer Input Rendering */}
-                <div className="field-answer">
-                    <AnswerInput 
-                        field={field} 
-                        activeFieldId={activeFieldId} 
-                        handleUpdateField={handleUpdateField} 
-                        handleAddOption={handleAddOption} 
-                        handleUpdateOption={handleUpdateOption} 
-                        handleDeleteOption={handleDeleteOption} 
-                        isPreviewMode={isPreview}
-                        // 2. 🔑 PASS NEW PROPS TO THE ANSWER INPUT
-                        answerValue={answerValue}
-                        handleAnswerChange={handleAnswerChange}
-                    />
+            {/* 4. Settings Footer: Hide if editing is disabled */}
+            {!isEditingDisabled && isFieldActive && (
+            <div className="field-settings-footer">
+                <button type="button" className="action-btn copy-field-btn" onClick={() => handleCopyField(field.id)} title="Duplicate Field"><FaCopy /></button>
+                <button type="button" className="action-btn delete-field-btn" onClick={() => handleDeleteField(field.id)} title="Delete Field"><FaTrash /></button>
+                <div className="settings-group">
+                    <label className="description-toggle">Description</label>
+                    <input type="checkbox" className="toggle-switch" checked={field.showDescription} onChange={(e) => handleUpdateField(field.id, { showDescription: e.target.checked })} />
                 </div>
 
-                {/* 4. Settings Footer: Hide completely if in Preview Mode */}
-                {!isPreview && isFieldActive && (
-                    <div className="field-settings-footer">
-                        <button type="button" className="action-btn copy-field-btn" onClick={() => handleCopyField(field.id)} title="Duplicate Field"><FaCopy /></button>
-                        <button type="button" className="action-btn delete-field-btn" onClick={() => handleDeleteField(field.id)} title="Delete Field"><FaTrash /></button>
-                        <div className="settings-group">
-                            <label className="description-toggle">Description</label>
-                            <input type="checkbox" className="toggle-switch" checked={field.showDescription} onChange={(e) => handleUpdateField(field.id, { showDescription: e.target.checked })} />
-                        </div>
-                        <div className="settings-group required-group">
-                            <label className="required-toggle-label">Required</label>
-                            <input type="checkbox" className="toggle-switch" checked={field.required} onChange={(e) => handleUpdateField(field.id, { required: e.target.checked })} />
-                        </div>
-                    </div>
-                )}
+                <div className="settings-group required-group">
+                    <label className="required-toggle-label">Required</label>
+                    <input type="checkbox" className="toggle-switch" checked={field.required} onChange={(e) => handleUpdateField(field.id, { required: e.target.checked })} />
+                </div>
             </div>
+            )}
         </div>
-    );
+    </div>
+  );
 };
 
 export default FieldCard;
+

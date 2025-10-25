@@ -6,6 +6,7 @@ import EmptyPage from "../../assets/EmptyPage.png"
 import Search from "../../assets/Search.png"
 import DeleteFormModal from './DeleteFormModal';
 import ToggleVisibilityModal from './ToggleVisibilityModal';
+import AssignLearnersModal from './AssignLearnersModal';
 
 const PAGE_SIZE = 9
 
@@ -86,6 +87,9 @@ export default function AdminHome () {
   const [formToToggle, setFormToToggle] = useState(null);
   const [targetVisibility, setTargetVisibility] = useState(null); // true/false
 
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [formToAssign, setFormToAssign] = useState(null);
+
   const fetchForms = async (pageNumber) => {
     setLoading(true)
 
@@ -119,6 +123,26 @@ export default function AdminHome () {
         
     //     setLoading(false);
     // };
+
+    const handleAssignLearners = (formId) => {
+        const formToFind = forms.find(f => f.id === formId);
+        if (formToFind) {
+            setFormToAssign(formToFind);
+            setShowAssignModal(true);
+            setOpenDropdownId(null); // Close the action dropdown
+        }
+    };
+    
+    // 💡 FINAL ASSIGNMENT LOGIC
+    const confirmAssignLearners = (formId, learnerIds) => {
+        // You would typically make an API call here to assign the form/content
+        console.log(`Form ID ${formId} assigned to ${learnerIds.length} learners:`, learnerIds);
+        alert(`Successfully assigned form to ${learnerIds.length} learners.`);
+        
+        // Close modal and clear state
+        setShowAssignModal(false);
+        setFormToAssign(null);
+    };
 
     const handleToggleVisibility = (formId, newVisibility) => {
       const formToFind = forms.find(f => f.id === formId);
@@ -194,17 +218,17 @@ export default function AdminHome () {
   // Close dropdown if clicking outside
   useEffect(() => {
     const handleClickOutside = () => setOpenDropdownId(null)
-    if (!showDeleteModal && !showVisibilityModal) {
+    if (!showDeleteModal && !showVisibilityModal && !showAssignModal) {
       document.addEventListener('click', handleClickOutside)
       return () => document.removeEventListener('click', handleClickOutside)
     }
-  }, [showDeleteModal, showVisibilityModal])
+  }, [showDeleteModal, showVisibilityModal, showAssignModal])
 
   const goPrev = () => { if (page > 1) setPage(page - 1) }
   const goNext = () => { if (page < totalPages) setPage(page + 1) }
   const goto = (n) => { if (n >= 1 && n <= totalPages) setPage(n) }
 
-  const isModalActive = showDeleteModal || showVisibilityModal;
+  const isModalActive = showDeleteModal || showVisibilityModal || showAssignModal;
 
   //const isEmpty = !loading && forms.length === 0 && totalPages === 1;
   const isEmpty = false;
@@ -246,6 +270,14 @@ export default function AdminHome () {
                     onConfirm={confirmToggleVisibility}
                 />
             )}
+
+            {showAssignModal && formToAssign && (
+                    <AssignLearnersModal
+                        form={formToAssign}
+                        onCancel={() => setShowAssignModal(false)}
+                        onConfirm={confirmAssignLearners}
+                    />
+            )}
             
             <section className={`admin-home ${isModalActive ? 'modal-active' : ''}`}> 
                 <div className="home-header">
@@ -276,6 +308,7 @@ export default function AdminHome () {
                                 handleEdit={handleEdit}
                                 handleToggleVisibility={handleToggleVisibility}
                                 handleDelete={handleDelete}
+                                handleAssignLearners={handleAssignLearners}
                                 disabled={isModalActive} // Pass disabled state to FormCard
                             />
                         ))

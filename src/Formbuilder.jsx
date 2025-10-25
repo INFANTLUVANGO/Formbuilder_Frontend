@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Layout from './Components/Layout/Layout'
 import AdminHome from './Components/Admin/AdminHome'
 import CreateForm from './Components/Admin/Create/CreateForm'
-import AssignLearner from './Components/Admin/AssignLearner'
+
 import Preview from "./Components/Admin/Create/Preview";
 import './Styles/All.sass'
 
@@ -14,17 +14,18 @@ export default function FormBuilder() {
         <Routes>
 
           <Route path="/" element={<AdminHome />} />
-          {/* Primary route for creating/draft editing */}
-          <Route path="/create/:formId?" element={<CreateForm />} /> 
-          <Route path="/assign-learner" element={<AssignLearner />} />
-          
-          {/* 🌟 UPDATED: Dedicated route for 'View Form' (Read-only Config/Layout) */}
-          <Route path="/view-form/:formId" element={<CreateForm />} />
-          
-          {/* 🌟 UPDATED: Dedicated route for 'View Responses' (Direct jump to Responses tab) */}
-          <Route path="/view-responses/:formId" element={<CreateForm />} />
-          
-          <Route path="/preview/:formId" element={<Preview />} />
+          {/* Primary route for creating/draft editing */}
+          <Route path="/create/:formId?" element={<CreateForm />} /> 
+          
+          
+          {/* 🌟 UPDATED: Dedicated route for 'View Form' (Read-only Config/Layout) */}
+          <Route path="/view-form/:formId" element={<CreateForm />} />
+          
+          {/* 🌟 UPDATED: Dedicated route for 'View Responses' (Direct jump to Responses tab) */}
+          <Route path="/view-responses/:formId" element={<CreateForm />} />
+          
+          <Route path="/preview/:formId" element={<Preview />} />
+          <Route path="/form/:formId/view-response/:responseId" element={<Preview />} />
 
         </Routes>
       </Layout>

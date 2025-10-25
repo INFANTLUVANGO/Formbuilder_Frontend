@@ -1,0 +1,233 @@
+// ResponseView.sass (Updated File)
+
+// --- Global Variables (Define these based on your application's theme) ---
+$primary-color: #5D38DF          // Used for active buttons/view button
+$secondary-color: #6b7280        // Muted text color
+$border-color: #e6e9ef           // Light border color
+$light-bg: #f7f8fb               // Light background for table header/pagination row
+$selected-row-color: #eef2ff     // Light primary shade for row selection (Optional)
+$font-color: #333                // Main text color
+$text-dark: #1f2937              // Darker text color
+$input-border: #D8D8D8           // Border for search input
+$success-color: #0f5132          // Dark green for Submitted status
+$success-light: #d1e7dd          // Light green for Submitted background
+$warning-color: #664d03          // Dark gold for Pending status
+$warning-light: #fff3cd          // Light yellow for Pending background
+
+
+.response-view-container
+    // Takes up the full area below the main page tabs in CreateForm.jsx
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-height: calc(100vh - 120px);
+    background-color: #ffff;
+    border-radius: 16px; // Allows content area to scroll if needed
+
+    // --- 1. Header/Toolbar: Toggle Buttons (From Previous Step) ---
+    .response-header-toolbar
+        padding: 15px 20px 15px 20px;
+        border-bottom: 1px solid $border-color;
+        flex-shrink: 0;
+        
+        .toggle-group
+            display: flex
+            background-color: #f1eeee
+            width: 270px
+            height: 46px
+            justify-content: center
+            align-items: center
+            border-radius: 8px
+
+            .toggle-btn
+                text-align: center
+                border-radius: 6px
+                padding: 6px 12px
+                border: none
+                font-size: 13.5px
+                height: 35px
+                width: 130px
+                font-weight: 600
+                cursor: pointer
+                transition: all 0.2s ease;
+                
+                &.active
+                    background-color: $primary-color;
+                    color: white;
+                    font-weight: 600;
+
+    // --- 2. Main Toolbar: Search (Left) and Export (Right) ---
+    .response-toolbar
+        display: flex;
+        justify-content: space-between; // Aligns Search to left, Export to right
+        align-items: center;
+        padding: 15px 20px 15px 20px;
+        flex-shrink: 0;
+
+        .search-bar-container
+            // This is the container for the Search Input and Search Icon
+            position: relative;
+            width: 350px; 
+            display: flex;
+            align-items: center;
+
+
+            .response-search-input
+                width: 100%;
+                // Padding adjusted to make space for an icon on the left
+                padding: 10px 10px 10px 40px; 
+                height: 40px; // Standard height
+                border: 1px solid $input-border;
+                border-radius: 8px;
+                font-size: 14px;
+                box-sizing: border-box;
+                color: $text-dark; 
+            
+            // NOTE: You'd need to add a search icon (e.g., using FaSearch from react-icons) 
+            // and apply this style to it in the JSX if you want the visual icon.
+            .search-icon
+                position: absolute;
+                color: $secondary-color;
+                left: 20px // Position icon from the left edge
+                width: 18px // Adjust size as needed
+                height: 18px
+                z-index: 10 
+
+        .export-btn
+            display: flex
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            border: 1px solid #e6e9ef;
+            border-radius: 8px;
+            background-color: #5D38DF;
+            color: #ffff;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            
+
+    // --- 3. Data Table ---
+    .response-table-wrapper
+        flex-grow: 1;
+        overflow-y: auto; // Makes the table body scrollable
+        border-radius: 8px;
+        padding: 15px 20px 0px 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+        .response-table
+            width: 100%
+            border-collapse: collapse
+            font-size: 14px
+
+            thead th
+                background-color: #F0F0F0
+                color: $secondary-color 
+                padding: 12px 20px
+                text-align: left
+                font-weight: 600
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                font-size: 13px;
+                border-bottom: 1px solid $border-color
+                position: sticky 
+                top: 0
+                z-index: 10
+            
+            tbody td
+                padding: 12px 20px 
+                border-bottom: 1px solid $border-color
+                vertical-align: middle
+                padding-bottom: 15px
+            
+            tbody tr:hover:not(.selected-row)
+                background-color: lighten($light-bg, 1%)
+
+            .selected-row
+                background-color: $selected-row-color
+
+            // View Button & Status Tag styles (from previous step, included for completeness)
+            .view-btn
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                padding: 6px 10px;
+                border: none;
+                border-radius: 4px;
+                background-color: $primary-color;
+                color: white;
+                font-weight: 500;
+                cursor: pointer;
+                &:hover
+                    background-color: darken($primary-color, 5%);
+            
+            .status-tag
+                padding: 4px 10px;
+                border-radius: 5px;
+                font-weight: 600;
+                font-size: 12px;
+                display: inline-block;
+
+                &.submitted
+                    background: rgba(128, 216, 188, 0.25)
+                    color: #3AB876
+                    border: 1px solid #3AB876
+
+                &.pending
+                    background: #FEF4E1
+                    color: #F6A609
+                    border: 1px solid #F6A609
+
+    // --- 4. Pagination Row ---
+    .pagination-row
+        display: flex
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 15px 20px 15px 20px;
+        flex-shrink: 0;
+        border-bottom-right-radius: 16px;
+        border-bottom-left-radius: 16px;
+        box-shadow: 0px -2px 4px 0px #00000029;
+
+        .items-per-page-selector
+            display: flex
+            align-items: center
+            gap: 8px
+            span
+                font-size: 13px
+                color: $secondary-color;
+            select
+                padding: 5px 8px
+                border: 1px solid $border-color
+                border-radius: 4px
+
+        .page-navigation
+            display: flex
+            align-items: center
+            gap: 10px
+
+        .current-page-info
+            font-size: 13px
+            color: $secondary-color
+
+        .nav-button
+            // Reusing your primary color for active pagination buttons
+            background: $primary-color
+            border: 1px solid $border-color
+            padding: 5px 10px
+            cursor: pointer
+            border-radius: 8px
+            color: #ffff
+            transition: background-color 0.2s
+
+            &:hover:not(:disabled)
+                background-color: darken($primary-color, 5%)
+
+            &:disabled
+                opacity: 1;
+                cursor: not-allowed;
+                background: none;
+                border: 1px solid #b0b7bd;
+                color: black;

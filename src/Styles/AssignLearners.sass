@@ -1,0 +1,237 @@
+// AssignLearnersModal.sass
+
+// --- Global Variables (Define these based on your application's theme) ---
+// Note: These must match the variables accessible in AdminHome.sass 
+// or be defined consistently across your application theme.
+$primary-color: #007bff         // Used for assignment button
+$secondary-color: #6c757d
+$border-color: #dee2e6
+$light-bg: #f8f9fa
+$selected-row-color: #e6f7ff    // Light blue for row selection
+$font-color: #333
+$footer-height: 70px 
+$text-dark: #1f2937 // Using a variable from the AdminHome context
+
+// --- Modal Header Refinements ---
+.assign-modal-overlay
+    position: fixed
+    top: 0
+    left: 0
+    width: 100vw
+    height: 100vh
+    background-color: rgba(0, 0, 0, 0.4) // Semi-transparent black background
+    display: flex
+    justify-content: center
+    align-items: center
+    z-index: 1000 // Ensures it's on top of everything
+
+    .assign-modal-card
+        background-color: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        width: 1250px;
+        max-width: 90%;
+        /* height: 250px; */
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 10px
+        animation: fadeIn 0.2   s ease-out;
+        
+        .assign-header
+            padding: 25px 20px;
+            background-color: $light-bg; // Use light-bg for modal header background
+            
+            .title-text
+                font-size: 1.25rem;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+                color: $text-dark; 
+
+            .close-btn
+                font-size: 20px;
+                color: $secondary-color; // Use secondary color for close button
+                &:hover
+                    color: $font-color;
+
+        // --- Modal Content - Holds Search, Table, and Pagination (Replaces .content-card) ---
+        .assign-content
+            // The modal content itself is the 'card'
+            flex-grow: 1; 
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            overflow-y: hidden; // Prevents the whole modal from scrolling internally if height is fixed
+
+            // --- Search Bar (Uses provided styles) ---
+            .search-bar-container
+                position: relative
+                display: flex
+                align-items: center
+                width: 350px // Match the original input width
+                height: 60px 
+                padding: 10px// Match the original input height
+
+                .search-icon
+                    position: absolute
+                    left: 20px // Position icon from the left edge
+                    width: 18px // Adjust size as needed
+                    height: 18px
+                    z-index: 10 // Ensure the icon is above the input
+
+                // 🌟 UPDATED: Target the input inside the search-box
+                .learner-search-input
+                    // Reset styling to be full-width of the container
+                    width: 100%
+                    height: 100%
+                    
+                    // Crucial: Add padding-left to make room for the icon
+                    padding: 6px 8px 6px 36px // Increased left padding (e.g., 36px)
+                    
+                    border-radius: 8px
+                    border: 1px solid #0000003D
+                    background: #fff
+                    color: #6b7280 // Use variable for consistency
+                    box-sizing: border-box
+
+            .learner-search-input
+                padding: 10px
+                border: 1px solid $border-color
+                border-radius: 4px
+                flex-grow: 1
+                font-size: 14px
+
+            // --- Table Styles (Uses provided styles) ---
+            .learner-table-wrapper
+                flex-grow: 1;
+                overflow-y: auto;
+                padding: 10px // Only the table body should scroll if content overflows
+
+                .learners-table
+                    width: 100%
+                    border-collapse: collapse
+                    font-size: 14px
+                    
+                    thead th
+                        background-color: #F0F0F0
+                        color: $font-color
+                        padding: 12px 30px
+                        text-align: left
+                        font-weight: 600
+                        border-bottom: 1px solid $border-color
+                        position: sticky // Ensures header sticks
+                        top: 0
+                        z-index: 10
+                    
+                    tbody td
+                        padding: 12px 30px 20px
+                        border-bottom: 1px solid $border-color
+                        vertical-align: middle
+
+                    tbody tr:hover
+                        background-color: lighten($light-bg, 1%)
+                    
+                    .selected-row
+                        background-color: $selected-row-color 
+                    
+                    .no-results
+                        text-align: center
+                        padding: 30px !important
+
+            // --- Pagination Row (Uses provided styles) ---
+            .pagination-row
+                display: flex
+                justify-content: space-between; 
+                align-items: center
+                padding: 15px 20px
+                background-color: $light-bg
+                flex-shrink: 0
+
+                .items-per-page-selector
+                    display: flex
+                    align-items: center
+                    gap: 8px
+                    span
+                        font-size: 13px
+                        color: $secondary-color;
+                    select
+                        padding: 5px 8px
+                        border: 1px solid $border-color
+                        border-radius: 4px
+
+                .page-navigation
+                    display: flex
+                    align-items: center
+                    gap: 10px
+
+                .current-page-info
+                    font-size: 13px
+                    color: $secondary-color
+
+                .nav-button
+                    background: #5D38DF
+                    border: 1px solid $border-color
+                    padding: 5px 10px
+                    cursor: pointer
+                    border-radius: 8px
+                    color: #ffff
+                    &:disabled
+                        opacity: 0.5;
+                        cursor: not-allowed;
+                        background: none;
+                        border: 1px solid #b0b7bd;
+                        color: black;
+                        
+
+        // ----------------------------------------------------
+        // --- MODAL FOOTER STYLES (Mapped from your .modal-c) ---
+        // ----------------------------------------------------
+        // Instead of using position: fixed, we use the .modal-card-actions
+        // at the bottom of the flex column.
+
+        .modal-card-actions
+            // Overriding the default padding and styling to match the large footer feel
+            display: flex
+            justify-content: flex-end
+            padding: 15px 20px // Reduced padding from 3rem to fit modal width
+            height: $footer-height // Match the desired footer height
+            background-color: white
+           
+            box-shadow: 0px -2px 4px 0px #00000029;
+            z-index: 10
+            flex-shrink: 0
+            gap: 16px // Use 1rem equivalent
+
+            button
+                padding: 10px 20px
+                border-radius: 6px
+                font-size: 1rem
+                font-weight: 500
+                cursor: pointer
+                transition: all 0.2s ease
+
+
+            .cancel-btn
+                background-color: white
+                color: $primary-color
+                border: 1px solid $primary-color
+                margin-right: 0 // Remove margin since gap handles spacing
+
+            .confirm-btn // Renamed from .assign-btn to match the React component
+                background-color: $primary-color
+                color: white
+                border: 1px solid $primary-color
+
+            button:disabled
+                opacity: 0.4
+                cursor: not-allowed
+                border: 1px solid #ccc 
+                background-color: #f5f5f5 
+                color: #aaaaaa
+
+
+
+.learners-table tbody td.learner-name-cell
+    display: flex
+    align-items: center
+    gap: 10px

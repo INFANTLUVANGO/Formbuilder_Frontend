@@ -24,37 +24,18 @@ const Header = ({ pageTitleOverride }) => {
 
     const mainRoute = paths[0];
     const isPreviewPage = mainRoute === 'preview';
-    const formId = isPreviewPage && paths.length > 1 ? paths[1] : null;
 
     // 2. 🔑 DEFINE handleGoBack SECOND
   const handleGoBack = () => {
-    // The targetPath now correctly uses the formId from the outer scope
-    const targetPath = `/create/${formId}`;
-    
-        // 🚨 DEBUG STEP: Check what path is being generated.
-    console.log("Current Path:", location.pathname);
-    console.log("Extracted Form ID:", formId); // Will now show the ID or null
-    console.log("Attempting Navigation To:", targetPath); 
-    // ----------------------------------------------------
-
-    if (formId) {
-      navigate(targetPath);
-    } else {
-      // Fallback
-      console.error("Form ID not found. Falling back to history.");
-      navigate(-1);
-    }
+    navigate(-1);
   };
-    // 🎯 Identify the main page route and if we are in preview mode
-   
-    // Determine the title for the first crumb (the editor/main page)
+    
     let baseTitle = '';
     let baseLinkPath = ''; // Path to link back to the editor (e.g., /create/123)
     
     // Map the known routes
     const routeMap = {
         'create': paths.length > 1 ? 'Edit Form' : 'Create Form',
-        'assign-learner': 'AssignLearner',
         'view-form': 'View Form',
         'view-responses': 'ViewResponses',
         'preview': 'Edit Form'
@@ -114,7 +95,6 @@ const Header = ({ pageTitleOverride }) => {
         crumbs.push(<span key="form" className="crumb active">FormBuilder</span>);
     }
 
-    // Determine which header content to show: the prominent title (for preview/submit view) or the breadcrumbs (for editor/admin view).
     // The prominent title appears only if we are on the preview page AND the form name is available.
     const isFormViewer = isPreviewPage && pageTitleOverride;
     

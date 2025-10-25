@@ -5,6 +5,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 // The fa-icons import is correctly removed.
 import ConfigView from './ConfigView';
 import LayoutView from './LayoutView';
+import ResponseView from './ResponseView';
 import "../../../Styles/CreateForm/Home.sass"
 // IMPORTS for PNG icons
 import date from "../../../assets/date.png"
@@ -242,7 +243,6 @@ const CreateForm = () => {
     };
 
     const handlePreview = () => {
-        if (isReadOnly) return; // Prevent action if read-only
         saveFormToLocal('draft');
         navigate(`/preview/${currentFormId}`);
     };
@@ -390,6 +390,19 @@ const CreateForm = () => {
     };
 
 
+    const handleViewResponse = (responseId) => {
+    // Logic to open a response viewer modal or page
+    navigate(`/form/${currentFormId}/view-response/${responseId}`);
+    
+    };
+
+    const handleExport = (viewMode) => {
+        // Logic to trigger the Excel export based on the current view mode
+        console.log(`Exporting data for view: ${viewMode}`);
+        alert(`Exporting ${viewMode} data to Excel...`);
+    };
+
+
 
     return (
         <div className="form-builder-page">
@@ -449,15 +462,21 @@ const CreateForm = () => {
                 />
             ) : ( // Responses View
                 <div className="responses-view-container">
-                    <h2>Responses for: {HeaderName || formName || 'Untitled Form'}</h2>
-                    <p>This is the full-page content area for viewing form responses. (Currently mock content)</p>
-                    {/* Add your actual ResponseList/Table component here */}
+                    <ResponseView // <--- NEW COMPONENT USAGE
+                        formId={urlFormId || currentFormId}
+                        formName={HeaderName || formName || 'Untitled Form'}
+                        onViewResponse={handleViewResponse}
+                        onExport={handleExport}
+                    />
                 </div>
             )}
 
             <div className="form-action-footer">
                 {/* 🌟 4. HIDE ALL ACTIONS IF IN READ-ONLY MODE */}
-                {!isReadOnly && view === 'layout' && (
+                {(
+                    (!isReadOnly && view === 'layout') || 
+                    (isReadOnly)             
+                ) && (
                     <button className="preview-btn" onClick={handlePreview}>
                         <img src={previewIcon} alt="Preview" className="action-icon" /> 
                         Preview Form 

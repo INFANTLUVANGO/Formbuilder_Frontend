@@ -17,7 +17,7 @@ const ToggleSwitch = ({ isOn, handleToggle, formId }) => {
                 type="checkbox"
             />
             <label
-                style={{ background: isOn ? '#4CAF50' : '#ccc' }}
+                style={{ background: isOn ? '#5D38DF' : '#ccc' }}
                 className="toggle-label"
                 htmlFor={uniqueId}
             >
@@ -27,7 +27,7 @@ const ToggleSwitch = ({ isOn, handleToggle, formId }) => {
     );
 };
 
-const FormCard = ({ form, openDropdownId, setOpenDropdownId, handleEdit, handleDelete, handleToggleVisibility }) => {
+const FormCard = ({ form, openDropdownId, setOpenDropdownId, handleEdit, handleDelete, handleToggleVisibility, handleAssignLearners }) => {
     const navigate = useNavigate();
     
     // Status Logic: isPublished determines the visual state for both the badge and the toggle
@@ -40,6 +40,18 @@ const FormCard = ({ form, openDropdownId, setOpenDropdownId, handleEdit, handleD
     const toggleMenu = (e) => {
         e.stopPropagation();
         setOpenDropdownId(isOpen ? null : form.id);
+    };
+
+
+    const handleAssignClick = (e) => {
+        e.stopPropagation();
+        // 💡 Calls the parent handler function to open the modal
+        if (!isVisible) {
+            // If formVisibility is false (off), show the alert
+            alert("Assign restricted: Form is currently disabled (Visibility OFF).");
+            return;
+        }
+        handleAssignLearners(form.id); 
     };
 
     const handleEditClick = (e) => {
@@ -84,7 +96,7 @@ const FormCard = ({ form, openDropdownId, setOpenDropdownId, handleEdit, handleD
                     <div className="dropdown">
                         {isPublished ? (
                             <>
-                                <button onClick={() => navigate("/assign-learner")}>Assign Learners</button>
+                                <button onClick={handleAssignClick}>Assign Learners</button>
                                 <button onClick={handleViewFormClick}>View Form</button>
                                 <button className="delete" onClick={handleDeleteClick}>Delete</button>
                             </>
