@@ -1,0 +1,104 @@
+// ===================================
+// Styles to add to FormCard.sass (or a new LearnerCard.sass)
+// ===================================
+
+$primary-purple: #5D38DF // Defining the main action color
+$text-light: #737373
+$border-color: #E5E5E5
+$text-dark: #262626
+
+.learner-form-card
+    background: #ffffff
+    border: 1px solid #D8D8D8
+    border-radius: 12px
+    box-shadow: 0 6px 18px rgba(54, 57, 78, 0.06)
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    transition: transform 0.12s ease
+    // Inherit the base card styles (border, shadow, background)
+
+    .card-header 
+        display: flex
+        justify-content: space-between
+        align-items: flex-start
+        margin-bottom: 12px
+        padding: 15px 20px
+        background-color: #F0F0F0
+        border-top-left-radius: 12px
+        border-top-right-radius: 12px
+        position: relative
+
+    .card-title
+        font-size: 1.15rem
+        font-weight: 600
+        color: $text-dark
+        margin-bottom: 8px
+        line-height: 1.4
+
+    .card-body
+        margin: 6px 0
+        font-size: 0.9rem
+        color: #6b7280
+        padding: 0px 15px
+        
+    .description
+        font-size: 0.9rem
+        color: $text-light
+        display: -webkit-box
+        -webkit-line-clamp: 3
+        -webkit-box-orient: vertical
+        overflow: hidden
+        min-height: 40px // Consistent height for descriptions
+
+    .card-meta
+        margin-bottom: 20px
+
+    .due-date
+        font-size: 0.85rem
+        color: $text-light
+        margin-bottom: 10px
+        strong
+            color: $text-dark
+            font-weight: 600
+
+    // --- Status/Name Tag ---
+    .form-tag
+        display: inline-block
+        padding: 4px 10px
+        border-radius: 4px
+        font-size: 0.75rem
+        font-weight: 500
+        
+    // NEW: Style for the Form Title used as a tag
+    .form-name-tag 
+        background-color: #F0F0F0 // Light gray background
+        color: $text-dark 
+        border: 1px solid $border-color
+        text-transform: none // Keep original capitalization for the name
+
+    // Removed: .tag-needs-form, .tag-external-completion, .tag-request-completion
+
+    // --- Action Button ---
+    .card-footer-action
+        padding: 15px 15px 15px
+        border-top: 1px dashed $border-color 
+
+    .action-btn
+        width: 100%
+        padding: 12px 0
+        border: none
+        border-radius: 8px
+        font-size: 1rem
+        font-weight: 600
+        cursor: pointer
+        transition: background-color 0.2s
+        
+        // NEW: Single style for the "Submit Response" button
+        &.submit-response 
+            background-color: $primary-purple // #5D38DF
+            color: #fff
+            &:hover
+                background-color: darken($primary-purple, 5%)
+
+    // Removed: &.request, &.completion, &.request_completion

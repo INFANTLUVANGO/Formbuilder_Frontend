@@ -3,16 +3,78 @@
 // --- Global Variables (Define these based on your application's theme) ---
 $primary-color: #5D38DF          // Used for active buttons/view button
 $secondary-color: #6b7280        // Muted text color
-$border-color: #e6e9ef           // Light border color
+$border-color: #e6e9ef    
+$primary-purple: #5D38DF       // Light border color
 $light-bg: #f7f8fb               // Light background for table header/pagination row
 $selected-row-color: #eef2ff     // Light primary shade for row selection (Optional)
-$font-color: #333                // Main text color
-$text-dark: #1f2937              // Darker text color
+$font-color: #333       
+$background-light: #F9FAFB         // Main text color
+$text-dark: #1f2937   
+$text-light: #737373           // Darker text color
 $input-border: #D8D8D8           // Border for search input
 $success-color: #0f5132          // Dark green for Submitted status
 $success-light: #d1e7dd          // Light green for Submitted background
 $warning-color: #664d03          // Dark gold for Pending status
-$warning-light: #fff3cd          // Light yellow for Pending background
+$warning-light: #fff3cd    
+$text-muted: #6b7280          // Light yellow for Pending background
+
+// Assume $text-muted, $color-border-light, and $color-background-card are defined elsewhere
+
+// --- 1. Empty State Container Styles ---
+.response-empty-state-container
+    flex-grow: 1 // Takes up all available vertical space
+    display: flex
+    align-items: center
+    justify-content: center
+    background-color: #ffff
+    height: 800px
+    width: 100%
+    // Optional: Add a light background here if the container needs distinction
+    // background: $color-background-page 
+
+    .empty-state
+        display: flex
+        flex-direction: column
+        align-items: center
+        justify-content: center
+        padding: 60px 20px
+        text-align: center
+        max-width: 700px
+        
+        .main
+            width: 400px
+            height: 400px
+            display: flex
+            align-items: center
+            border-radius: 50%
+            justify-content: center
+            background-color: #F8F8F8
+            .empty-page-image
+                width: 100%
+                max-width: 300px
+        
+        // --- 3. Text Content Styles ---
+        .temp
+            display: flex
+            align-items: center
+            justify-content: center
+            flex-direction: column
+            gap: 12px
+
+            .temp1
+                color: #262626
+                font-weight: 600
+                font-size: 24px
+                height: 20px // Fixed height and line-height for strict alignment
+                line-height: 20px
+                margin-bottom: 0
+
+            .temp2
+                font-size: 16px
+                color: $text-muted // Use the defined muted text color
+                letter-spacing: 0.2px
+                height: 22px // Fixed height and line-height for strict alignment
+                line-height: 22px
 
 
 .response-view-container
@@ -64,7 +126,7 @@ $warning-light: #fff3cd          // Light yellow for Pending background
         padding: 15px 20px 15px 20px;
         flex-shrink: 0;
 
-        .search-bar-container
+        .Response-search-bar-container
             // This is the container for the Search Input and Search Icon
             position: relative;
             width: 350px; 
@@ -182,52 +244,83 @@ $warning-light: #fff3cd          // Light yellow for Pending background
     // --- 4. Pagination Row ---
     .pagination-row
         display: flex
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        padding: 15px 20px 15px 20px;
-        flex-shrink: 0;
-        border-bottom-right-radius: 16px;
-        border-bottom-left-radius: 16px;
+        justify-content: space-between // Distributes space between items
+        align-items: center
+        padding: 10px 15px 
         box-shadow: 0px -2px 4px 0px #00000029;
+        font-size: 0.9rem
+        color: $text-light
 
-        .items-per-page-selector
-            display: flex
-            align-items: center
-            gap: 8px
-            span
-                font-size: 13px
-                color: $secondary-color;
-            select
-                padding: 5px 8px
-                border: 1px solid $border-color
-                border-radius: 4px
 
-        .page-navigation
-            display: flex
-            align-items: center
-            gap: 10px
-
-        .current-page-info
-            font-size: 13px
-            color: $secondary-color
-
-        .nav-button
-            // Reusing your primary color for active pagination buttons
-            background: $primary-color
+    .items-per-page-selector
+        display: flex
+        align-items: center
+        gap: 10px
+        
+        // Styles the Items per page dropdown to match the input look
+        select
+            padding: 8px 12px // Matches search input height
             border: 1px solid $border-color
-            padding: 5px 10px
-            cursor: pointer
-            border-radius: 8px
-            color: #ffff
-            transition: background-color 0.2s
+            border-radius: 6px
+            min-width: 70px
+            font-size: 0.9rem
+            font-weight: 500
+            color: $text-dark
+            // Custom arrow to match the design (if needed, otherwise rely on browser default)
+                
+    .page-navigation
+            display: flex
+            align-items: center
+            gap: 8px // Closer spacing for the navigation group
+            
+            
+            .current-page-info
+                display: flex 
+                align-items: center
 
-            &:hover:not(:disabled)
-                background-color: darken($primary-color, 5%)
+                select
+                    padding: 8px 12px // Matches search input height
+                    border: 1px solid $border-color
+                    border-right: none
+                    border-radius: 6px
+                    min-width: 30px
+                    height: 34px 
+                    font-size: 0.9rem
+                    font-weight: 500
+                    color: $text-dark
 
-            &:disabled
-                opacity: 1;
-                cursor: not-allowed;
-                background: none;
-                border: 1px solid #b0b7bd;
-                color: black;
+                        
+                .total-pages-display
+                    background-color: white
+                    padding: 4px 12px 4px 0
+                    border: 1px solid $border-color
+                    border-left: none // Connects to the dropdown
+                    border-radius: 0 6px 6px 0 // Sharp left, rounded right
+                    color: $text-dark 
+                    height: 34px // Matches the dropdown height
+                    display: flex
+                    align-items: center
+                    
+            // Navigation buttons
+            .nav-button
+                padding: 7px 15px
+                background-color: $background-light // Light gray background
+                border: 1px solid $border-color
+                color: $primary-purple
+                font-size: 1rem
+                font-weight: 600
+                
+                &.prev-button
+                    border-radius: 6px 0 0 6px // Rounded left, sharp right
+                    
+                &.next-button
+                    background-color: $primary-purple // Purple background for the right arrow
+                    color: white
+                    border-color: $primary-purple
+                    border-radius: 0 6px 6px 0 // Sharp left, rounded right
+
+                &:disabled
+                    background-color: #F3F4F6 // Lighter gray for disabled
+                    border-color: $border-color
+                    color: $text-light
+                    cursor: not-allowed

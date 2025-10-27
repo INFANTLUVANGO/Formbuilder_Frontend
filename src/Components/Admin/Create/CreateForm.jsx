@@ -232,12 +232,14 @@ const CreateForm = () => {
     };
 
     const handlePublish = () => {
+        if(formVisibility){console.log("lool")}    
+
         if (isReadOnly) return; // Prevent action if read-only
         if (formFields.length === 0) {
             alert("Please add at least one question before publishing.");
             return;
         }
-        saveFormToLocal('published');
+        saveFormToLocal('published',formVisibility);
         console.log(`Form '${formName}' published!`);
         navigate('/'); 
     };
@@ -379,7 +381,7 @@ const CreateForm = () => {
         copiedField.id = Date.now() + Math.random();
         
         // Optional: Prepend a phrase to the question to indicate it's a copy
-        copiedField.question = `Copy of ${originalField.question}`;
+        copiedField.question = originalField.question;
 
         const newFields = [...formFields];
         // Insert the copy immediately after the original field

@@ -1,0 +1,180 @@
+
+
+// --- 1. Variables for Consistency ---
+$primary-color: #007bff
+$secondary-color: #6c757d
+$background-color: #f8f9fa
+$card-bg-color: #ffffff
+$text-color: #343a40
+$light-text: #e9ecef
+$border-radius: 8px
+$transition-speed: 0.6s
+
+// --- 2. Layout & Container ---
+
+.auth-page-container
+  display: flex
+  justify-content: center
+  align-items: center
+  min-height: 100vh
+  background-color: $background-color
+  padding: 20px
+
+.split-screen-container
+  display: flex
+  width: 850px // Overall width of the card
+  height: 550px // Overall height of the card
+  border-radius: $border-radius
+  overflow: hidden
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2)
+  background-color: $card-bg-color
+
+  // Both sides take up 50% of the container width
+  .side-container
+    flex: 1
+    display: flex
+    justify-content: center
+    align-items: center
+    padding: 40px
+
+// --- 3. Left Side: Message Panel ---
+
+.message-panel
+  background: linear-gradient(135deg, $primary-color, darken($primary-color, 15%))
+  color: $light-text
+  text-align: center
+
+  .message-content
+    max-width: 300px
+
+  .welcome-heading
+    font-size: 2.2rem
+    margin-bottom: 10px
+
+  .tagline
+    font-size: 1.1rem
+    opacity: 0.8
+
+// --- 4. Right Side: Flip Logic ---
+
+.form-flipper-panel
+  background-color: $card-bg-color
+  position: relative
+
+  // CRITICAL: Set the perspective for the 3D effect
+  perspective: 1000px
+
+.form-flipper
+  width: 100%
+  height: 100%
+  position: relative
+  transform-style: preserve-3d // CRITICAL: Makes children exist in 3D space
+  transition: transform $transition-speed // Apply smooth rotation
+
+  &.flipped
+    transform: rotateY(180deg)
+
+.form-face
+  position: absolute
+  width: 100%
+  height: 100%
+  backface-visibility: hidden // Hides the back side of the element when rotated
+  display: flex
+  justify-content: center
+  align-items: center
+  padding: 0 40px
+
+  // Center and structure the form inside the face
+  form
+    width: 100%
+    max-width: 300px
+    text-align: center
+
+    h3
+      margin-bottom: 30px
+      color: $text-color
+      font-size: 1.8rem
+
+// Initial state for the Register form (rotated 180 degrees to be hidden)
+.form-register
+  transform: rotateY(180deg)
+
+// --- 5. Form Elements ---
+
+input
+  width: 100%
+  padding: 12px 15px
+  margin-bottom: 15px
+  border: 1px solid #ced4da
+  border-radius: $border-radius / 2
+  font-size: 1rem
+  color: $text-color
+  transition: border-color 0.3s
+
+  &:focus
+    border-color: $primary-color
+    outline: none
+    box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25)
+
+.primary-btn
+  width: 100%
+  padding: 12px
+  background-color: $primary-color
+  color: $card-bg-color
+  border: none
+  border-radius: $border-radius / 2
+  font-size: 1.1rem
+  cursor: pointer
+  margin-top: 10px
+  transition: background-color 0.3s
+
+  &:hover
+    background-color: darken($primary-color, 10%)
+
+.switch-prompt
+  margin-top: 20px
+  font-size: 0.9rem
+  color: $secondary-color
+
+  .switch-link
+    color: $primary-color
+    cursor: pointer
+    font-weight: bold
+    margin-left: 5px
+    &:hover
+      text-decoration: underline
+
+// --- 6. Responsive Adjustments (Optional but Recommended) ---
+
+@media (max-width: 800px)
+  .split-screen-container
+    flex-direction: column // Stack the panels vertically
+    width: 90% // Use more screen width
+    height: auto // Allow height to grow
+
+    .side-container
+      width: 100%
+      min-height: 250px // Give the message panel some height
+
+      &.form-flipper-panel
+        min-height: 450px // Ensure form has space
+
+  // Disable the 3D flip effect on small screens, switch to a simple toggle
+  .form-flipper
+    transform-style: flat // Override preserve-3d
+    transition: none
+
+  .form-register
+    // Hide/show the back face using opacity/display instead of rotation
+    transform: none
+    opacity: 0
+    visibility: hidden
+    transition: opacity $transition-speed, visibility $transition-speed
+
+  .form-flipper.flipped .form-login
+    opacity: 0
+    visibility: hidden
+
+  .form-flipper.flipped .form-register
+    opacity: 1
+    visibility: visible

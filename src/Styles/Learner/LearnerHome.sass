@@ -1,0 +1,120 @@
+// ===================================
+// LearnerHome.sass (REVERTED TO CARD GRID + NEW HEADER)
+// ===================================
+
+$primary-purple: #5D38DF
+$secondary-gray: #F5F5F5
+$text-dark: #262626
+$text-light: #737373
+$border-color: #E5E5E5
+$blue-info: #EFF6FF // Light blue background for info banner
+$blue-info-border: #93C5FD // Medium blue border/icon color
+$footer-height: 60px;
+
+.learner-home-container
+    padding: 0 2rem 2rem 2rem
+    padding-bottom: $footer-height + 30px 
+    // Using min-height is better than fixed height
+    min-height: 1000px 
+
+
+// --- 🌟 UPDATED: Tabs for Navigation (The new look) ---
+.learner-tabs
+    display: flex
+    border-bottom: 1px solid $border-color
+    margin-bottom: 30px
+    background-color: white
+    border-top-left-radius: 8px
+    border-top-right-radius: 8px
+    position: sticky
+    top: 0
+    z-index: 50
+
+    .tab
+        padding: 1rem 1.5rem
+        font-size: 1rem
+        cursor: pointer
+        transition: border-bottom 0.3s ease
+
+        &.active
+            color: $primary-purple
+            border-bottom: 2px solid $primary-purple
+            font-weight: 600
+
+        &.inactive
+            color: $text-light
+            border-bottom: 2px solid transparent 
+
+// --- Content Container ---
+
+.learner-tab-content
+    background-color: #ffff
+    padding: 20px
+    height: 1000px
+    border-radius: 8px
+// --- 🌟 NEW: Header Row: Banner (Left) and Search (Right) ---
+.forms-header
+    display: flex
+    justify-content: space-between
+    align-items: center
+    margin-bottom: 24px
+
+// Info Banner (Now on the left)
+.info-banner
+    display: flex
+    align-items: center
+    padding: 12px 20px
+    border-radius: 8px
+    background-color: $blue-info
+    border: 1px solid $blue-info-border
+    max-width: 60% 
+    
+    svg
+        stroke: $blue-info-border 
+        margin-right: 10px
+    
+    span
+        color: $text-dark
+        font-size: 0.9rem
+
+// Search Box (Now on the right)
+.learner-search-box
+    display: flex
+    align-items: center
+    padding: 10px 15px
+    border: 1px solid $border-color
+    border-radius: 8px
+    background-color: #fff
+    width: 300px 
+
+    .search-icon
+        width: 18px
+        height: 18px
+        margin-right: 10px
+
+    .search-input
+        flex-grow: 1
+        border: none
+        outline: none
+        font-size: 0.95rem
+        color: $text-dark
+
+
+// --- 🌟 REVERTED: Form Card Grid (Three in a row) ---
+.forms-grid
+    display: grid
+    // Creates the 3-column layout requested by the user
+    grid-template-columns: repeat(3, 1fr)
+    gap: 24px
+    
+    @media (max-width: 1200px) 
+        grid-template-columns: repeat(2, 1fr)
+    
+    @media (max-width: 768px) 
+        grid-template-columns: 1fr
+        
+.empty-message
+    grid-column: 1 / -1 // Span across all columns
+    text-align: center
+    color: $text-light
+    padding: 40px

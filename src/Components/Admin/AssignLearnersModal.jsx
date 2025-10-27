@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { FaUserCircle } from 'react-icons/fa'; // Icon for closing the modal
-import "../../Styles/AssignLearners.sass"
+import "../../Styles/Admin/AssignLearners.sass"
 import Search from "../../assets/Search.png"
  // Ensure the correct path
 
@@ -114,7 +114,7 @@ const AssignLearnersModal = ({ form, onCancel, onConfirm }) => {
             <div className="assign-content">
                 
                 {/* SEARCH BAR */}
-                <div className="search-bar-container">
+                <div className="assign-search-bar-container">
                     <img src={Search} alt="Search" className="search-icon" />
                     <input
                         type="text"

@@ -1,0 +1,187 @@
+// Styles/MyResponses.sass (Key components for the list view)
+
+$primary-purple: #5D38DF
+$border-color: #E5E5E5
+$text-dark: #262626
+$text-light: #737373
+$background-light: #F9FAFB
+
+.sub-list-container
+    // Ensures internal padding and background are set up
+    padding: 40px
+    background-color: white
+
+// --- TOOLBAR (Search and Export) ---
+.sub-toolbar
+    display: flex
+    justify-content: flex-end
+    align-items: center
+    margin-bottom: 20px
+    gap: 20px
+
+.search-bar-container
+    display: flex
+    align-items: center
+    border: 1px solid #0000003D
+    border-radius: 6px
+    padding: 8px 12px
+    background-color: white
+    width: 300px
+    
+    .search-icon
+        width: 18px
+        height: 18px
+        margin-right: 10px
+        opacity: 0.6
+    
+    .sub-search-input
+        border: none
+        outline: none
+        flex-grow: 1
+        font-size: 0.95rem
+
+.export-btn
+    padding: 10px 20px
+    background-color: $primary-purple
+    color: white
+    border: none
+    border-radius: 6px
+    font-weight: 600
+    cursor: pointer
+    transition: background-color 0.2s
+    &:hover
+        background-color: darken($primary-purple, 5%)
+
+// --- TABLE ---
+.sub-table-wrapper
+    overflow-x: auto 
+    // border: 1px solid $border-color
+    
+    
+.sub-table
+    width: 100%
+    border-collapse: collapse
+    
+    thead th
+        background-color: #F0F0F0
+        color: $text-dark
+        font-weight: 600
+        text-align: left
+        padding: 12px 15px
+        border-bottom: 1px solid $border-color
+        font-size: 0.9rem
+        
+    tbody td
+        padding: 12px 15px
+        border-bottom: 1px solid $border-color
+        color: $text-dark
+        font-size: 0.9rem
+        
+    tbody tr:last-child td
+        border-bottom: none
+        
+    .sub-action
+        text-align: center
+        width: 100px // Ensure the button column is narrow
+
+    .view-btn
+        padding: 6px 15px
+        background-color: $primary-purple
+        color: white
+        border: none
+        border-radius: 4px
+        font-size: 0.85rem
+        font-weight: 500
+        cursor: pointer
+        transition: background-color 0.2s
+        &:hover
+            background-color: darken($primary-purple, 8%)
+    
+    .no-results
+        text-align: center
+        padding: 40px
+        color: $text-light
+
+// --- PAGINATION ---
+.sub-pagination-row
+    display: flex
+    justify-content: space-between // Distributes space between items
+    align-items: center
+    padding: 10px 15px // Slightly reduced vertical padding for a compact look
+    box-shadow: 0px -2px 4px 0px #00000029;
+    font-size: 0.9rem
+    color: $text-light
+
+
+    .items-per-page-selector
+        display: flex
+        align-items: center
+        gap: 10px
+        
+        // Styles the Items per page dropdown to match the input look
+        select
+            padding: 8px 12px // Matches search input height
+            border: 1px solid $border-color
+            border-radius: 6px
+            min-width: 70px
+            font-size: 0.9rem
+            font-weight: 500
+            color: $text-dark
+            // Custom arrow to match the design (if needed, otherwise rely on browser default)
+            
+    .sub-page-navigation.controls-box
+        display: flex
+        align-items: center
+        gap: 8px // Closer spacing for the navigation group
+        
+        .current-page-info
+            display: flex 
+            align-items: center
+
+            select
+                padding: 8px 12px // Matches search input height
+                border: 1px solid $border-color
+                border-right: none
+                border-radius: 6px
+                min-width: 30px
+                height: 34px 
+                font-size: 0.9rem
+                font-weight: 500
+                color: $text-dark
+
+            
+                
+            .total-pages-display
+                background-color: white
+                padding: 4px 12px 4px 0
+                border: 1px solid $border-color
+                border-left: none // Connects to the dropdown
+                border-radius: 0 6px 6px 0 // Sharp left, rounded right
+                color: $text-dark 
+                height: 34px // Matches the dropdown height
+                display: flex
+                align-items: center
+                
+        // Navigation buttons
+        .nav-button
+            padding: 7px 15px
+            background-color: $background-light // Light gray background
+            border: 1px solid $border-color
+            color: $primary-purple
+            font-size: 1rem
+            font-weight: 600
+            
+            &.prev-button
+                border-radius: 6px 0 0 6px // Rounded left, sharp right
+                
+            &.next-button
+                background-color: $primary-purple // Purple background for the right arrow
+                color: white
+                border-color: $primary-purple
+                border-radius: 0 6px 6px 0 // Sharp left, rounded right
+
+            &:disabled
+                background-color: #F3F4F6 // Lighter gray for disabled
+                border-color: $border-color
+                color: $text-light
+                cursor: not-allowed

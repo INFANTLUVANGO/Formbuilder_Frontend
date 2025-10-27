@@ -1,17 +1,14 @@
 import React from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
-// Replaced import FaHome from 'react-icons/fa' with an inline SVG equivalent for compatibility
-// import { FaHome } from 'react-icons/fa' 
-import "../../Styles/Header.sass";
-
+// Note: Keeping original imports, assuming these assets are resolvable in your final environment
+import "../../Styles/Layout/Header.sass"; 
 import Home from "../../assets/ic_round-home.png"
 import Arrow from "../../assets/Alt Arrow Right.png"
 
 
 // Home Icon SVG replacement for FaHome
 const HomeIcon = (props) => (
-    <img src={Home} alt=""  style={{width: 24,height: 24}}/>
-    
+    <img src={Home} alt=""  style={{width: 24,height: 24}}/>
 );
 
 
@@ -19,84 +16,129 @@ const HomeIcon = (props) => (
 const Header = ({ pageTitleOverride }) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const paths = location.pathname.split('/').filter(Boolean); // e.g., ['create', '123'] or ['preview', '123']
+    const paths = location.pathname.split('/').filter(Boolean); // e.g., ['create', '123'] or ['learner', 'submit', '123']
     
+    // --- CONTEXT DETECTION ---
+    const isLearnerRoute = paths[0] === 'learner';
+    const rootLinkPath = isLearnerRoute ? '/learner' : '/';
+    const rootBreadcrumbText = isLearnerRoute ? 'Forms' : 'FormBuilder';
 
     const mainRoute = paths[0];
-    const isPreviewPage = mainRoute === 'preview';
+    const isPreviewPage = mainRoute === 'preview';
 
     // 2. 🔑 DEFINE handleGoBack SECOND
-  const handleGoBack = () => {
-    navigate(-1);
-  };
+    const handleGoBack = () => {
+        navigate(-1);
+    };
     
     let baseTitle = '';
     let baseLinkPath = ''; // Path to link back to the editor (e.g., /create/123)
     
-    // Map the known routes
+    // Map the known routes (Combined Admin and Learner sub-routes)
     const routeMap = {
+        // Admin Routes
         'create': paths.length > 1 ? 'Edit Form' : 'Create Form',
         'view-form': 'View Form',
-        'view-responses': 'ViewResponses',
-        'preview': 'Edit Form'
+        'view-responses': 'View Responses',
+        'preview': 'Edit Form',
+        // Learner Sub-Routes (only used if isLearnerRoute is true)
+        'submit': 'Submit Form',
     };
 
-    baseTitle = routeMap[mainRoute] || '';
+    let finalCrumbTitle = '';
+    
+    if (isLearnerRoute) {
+        // Handle Learner Routes
+        const subRoute = paths[1];
+        
+        if (!subRoute) {
+            baseTitle = rootBreadcrumbText; 
+            baseLinkPath = rootLinkPath;
+        } else {
+            baseTitle = routeMap[subRoute] || '';
 
-    // If we are on the preview page, the link back should be to /create/:formId
-    if (isPreviewPage && paths.length > 1) {
-        const formId = paths[1];
-        baseLinkPath = `/create/${formId}`;
-        baseTitle = 'Edit Form'; // Explicitly set base title for preview path
+            // Handle deep routes like /learner/submit/:formId
+            if (paths.length > 2) {
+                finalCrumbTitle = baseTitle; 
+                baseTitle = rootBreadcrumbText; 
+                baseLinkPath = rootLinkPath; 
+            } else {
+                baseLinkPath = `/learner/${subRoute}`;
+            }
+        }
+
     } else {
-        // For all other pages, the base link is the current path
-        baseLinkPath = `/${paths.join('/')}`;
+        // Handle Admin Routes (Original Logic)
+        baseTitle = routeMap[mainRoute] || '';
+
+        // If we are on the preview page, the link back should be to /create/:formId
+        if (isPreviewPage && paths.length > 1) {
+            const formId = paths[1];
+            baseLinkPath = `/create/${formId}`;
+            baseTitle = 'Edit Form'; 
+            finalCrumbTitle = 'Preview';
+        } else {
+            baseLinkPath = `/${paths.join('/')}`;
+        }
     }
 
 
     const crumbs = [
-        <Link key="home" to="/" className="crumb home">
+        <Link key="home" to={rootLinkPath} className="crumb home">
             <HomeIcon className="home-icon" />
         </Link>,
     ];
 
-    if (paths.length > 0) {
-        // 1. FormBuilder Crumb (Always present on sub-pages)
-        crumbs.push(<img src={Arrow} alt=""  style={{width: 20}}/>);
-        crumbs.push(<Link key="form" to="/" className="crumb">FormBuilder</Link>);
+    
+    const isAtDashboardRoot = paths.length === 0 || 
+                              (paths.length === 1 && paths[0] === 'learner');
 
-        // 2. Base Page Crumb (Create Form / Edit Form, etc.)
-        if (baseTitle) {
-            crumbs.push(<img src={Arrow} alt=""  style={{width: 24,height: 24}}/>);
+    if (paths.length > 0 || isAtDashboardRoot) {
+        
+        // --- 1. Root Crumb (FormBuilder or Forms) ---
+        crumbs.push(<img src={Arrow} alt="" style={{width: 20}}/>);
+        
+        if (isAtDashboardRoot && paths.length <= 1) {
+            // Path is exactly / or /learner. This is the final and active crumb.
+            crumbs.push(<span key="form-root" className="crumb active">{rootBreadcrumbText}</span>);
+        } else {
+            // Path is deeper (e.g., /create/123 or /learner/submit). Root is a link.
+            crumbs.push(<Link key="form-root" to={rootLinkPath} className="crumb">{rootBreadcrumbText}</Link>);
+        }
+
+        // --- 2. Base Page Crumb (Create Form / Edit Form, Submit Form, My Responses) ---
+        if (!isAtDashboardRoot || paths.length > 1) {
             
-            if (isPreviewPage) {
-                // If on preview, link back to the base page (/create/:formId)
+            crumbs.push(<img src={Arrow} alt=""  style={{width: 24,height: 24}}/>);
+            
+            if (finalCrumbTitle) {
+                // If we have a dedicated final crumb (like Preview), the base title links back
                 crumbs.push(
                     <Link key="base" to={baseLinkPath} className="crumb">{baseTitle}</Link>
                 );
             } else {
-                // If on the editor/other page, this is the final active crumb
+                // If this is the final page (e.g., /create/:id, /learner/submit)
                 crumbs.push(
                     <span key="base" className="crumb active">{baseTitle}</span>
                 );
             }
         }
         
-        // 3. 'Preview' Crumb (Only if applicable)
-        if (isPreviewPage) {
-            crumbs.push(<img src={Arrow} alt=""  style={{width: 24,height: 24}}/>);
-            // This is the final active crumb for the preview page
-            crumbs.push(<span key="preview" className="crumb active">Preview</span>);
+        // --- 3. Final Crumb (Preview or specific form view) ---
+        if (finalCrumbTitle) {
+            crumbs.push(<img src={Arrow} alt=""  style={{width: 24,height: 24}}/>);
+            // This is the final active crumb 
+            crumbs.push(<span key="preview" className="crumb active">{finalCrumbTitle}</span>);
         }
 
     } else {
-        // Root path
-        crumbs.push(<img src={Arrow} alt=""  style={{width: 24,height: 24}}/>);
-        crumbs.push(<span key="form" className="crumb active">FormBuilder</span>);
+        // Fallback for root path (Should be covered by isAtDashboardRoot but kept for safety)
+        crumbs.push(<img src={Arrow} alt=""  style={{width: 24,height: 24}}/>);
+        crumbs.push(<span key="form-root" className="crumb active">FormBuilder</span>);
     }
 
-    // The prominent title appears only if we are on the preview page AND the form name is available.
-    const isFormViewer = isPreviewPage && pageTitleOverride;
+    // The prominent title appears only on viewer pages 
+    const isFormViewer = (isPreviewPage || (isLearnerRoute && paths.length > 2)) && pageTitleOverride;
     
     return (
         // Apply 'viewer-header' class when showing the form title

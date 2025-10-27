@@ -1,6 +1,6 @@
 import React from 'react'
 import Header from './Header'
-import "../../Styles/Layout.sass";
+import "../../Styles/Layout/Layout.sass";
 
 // Accepting a new prop to override the header display, typically the form's name
 const Layout = ({ children, pageTitleOverride }) => {

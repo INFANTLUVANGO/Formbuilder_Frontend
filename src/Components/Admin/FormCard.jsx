@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../../Styles/FormCard.sass";
+import "../../Styles/Admin/FormCard.sass";
 
 
-// The ToggleSwitch component used in FormCard
+// The ToggleSwitch component used in FormCard (No changes needed here)
 const ToggleSwitch = ({ isOn, handleToggle, formId }) => { 
     // Creating a unique ID based on the formId to prevent conflicts in a list
     const uniqueId = `statusToggle-${formId}`;
@@ -73,13 +73,17 @@ const FormCard = ({ form, openDropdownId, setOpenDropdownId, handleEdit, handleD
         
     const handleViewResponsesClick = (e) => {
         e.stopPropagation();
+        
+        // Disable navigation if the form is a draft
+        if (!isPublished) {
+            console.log("Responses are not available for Draft forms.");
+            return; 
+        }
+
         setOpenDropdownId(null);
         navigate(`/view-responses/${form.id}`);
     };
 
-    // Recommended comment update (Optional):
-// Handler for the 'Enabled' toggle. It calls the parent function to flip the single 
-// 'visibility' boolean, which is synchronized with the Form Configuration view.
     const onToggle = (e) => {
         e.stopPropagation();
         handleToggleVisibility(form.id, !isVisible); 
@@ -130,28 +134,31 @@ const FormCard = ({ form, openDropdownId, setOpenDropdownId, handleEdit, handleD
                     {isPublished ? "Published" : "Draft"}
                 </span>
 
-                {/* 🔑 CORRECTED: This entire block (Toggle + View Responses) 
-                  is only rendered IF the form is published. 
-                */}
-                {isPublished && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '25px' }}>
-                        
-                        {/* 2. Enable Toggle: Reflects the Published status */}
+                {/* 🔑 FIX: Wrapper for all dynamic footer actions */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '25px' }}>
+                    
+                    {/* 2. Enable Toggle: ONLY RENDERED IF PUBLISHED */}
+                    {isPublished && (
                         <div className="status-toggle-wrapper">
                             <span className="status-label">Enabled</span>
                             <ToggleSwitch 
-                                isOn={isVisible} // Reflects form.status === "published"
+                                isOn={isVisible} 
                                 handleToggle={onToggle} 
                                 formId={form.id} 
                             />
                         </div>
-                            
-                        {/* 3. View Responses Button */}
-                        <button className="view-btn" onClick={handleViewResponsesClick}>
-                            View Responses
-                        </button>
-                    </div>
-                )}
+                    )}
+                        
+                    {/* 3. View Responses Button: ALWAYS RENDERED, DISABLED IF DRAFT */}
+                    <button 
+                        className="view-btn" 
+                        onClick={handleViewResponsesClick}
+                        disabled={!isPublished} // <-- FIX: Disable if NOT published (i.e., Draft)
+                    >
+                        View Responses
+                    </button>
+                </div>
+
             </div>
         </div>
     );
